@@ -1,0 +1,250 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mikrotik</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: forestgreen;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># Mikrotik</span>
+
+    <span class="head2">Connect To Mikrotik</span>
+        for connecting to mikrotik we use winbox -> connect to : mikrotik MAC or IP -> ip is 0.0.0.0 default
+                                                    login : username -> default admin
+                                                    password : password -> default empty 
+                                                    Neighbour : we can find connected routers to our network
+
+
+    <span class="head2">Create New User</span>
+        we should change default user after connecting for first time to mikrotik
+        System -> Users -> Group: full
+                        user : username
+                        pass : password
+        logout from mikrotik and login with new user and delete default admin user
+
+
+    <span class="head2">Change Name</span>
+        change mikrotik name help us to find special router if many routers available on network
+        System -> Identity
+
+
+    <span class="head2">Assign IP to eths</span>
+        IP -> Address -> + -> Address : network ip/mask (like 192.168.1.0/24)
+                            Interface : for which eth?
+                            Network : fill automatically
+
+
+    <span class="head2">Routes</span>
+        we have 2 route type in mikrotik
+            1.Conneected-Route      ->  all switches connected to one router
+            2.NotConnected-Route    ->  we have more than one route and they connected to eachother
+    
+        <span class="head3">1.Conneected-Route</span>
+            in this situation when we address eths on IP -> Address routes automatically will be create by mikrotik
+            and two eths clients can see eachother even if be on different ip range
+        
+        <span class="head3">2.NotConnected-Route</span>
+            in this situation we have two options (Static and Dynamic Route) to connect networks to eachother
+
+            in Static Route we create routes manually like below senario
+                if we have two routers that connect eachother like below
+                    <span class="shape">
+                                                eth1        eth2      eth2      eth1
+                    LAN 1            <------------> Router 1 <---------> Router 2 <---------> LAN 2
+                    192.168.200.0/24                10.10.11.1/30        10.10.11.2/30        172.16.30.0/24
+                    </span>
+                in this situation we assign ip for each router with following in IP -> Address
+
+                        router1                                     router2
+                    eth1 : 192.168.200.0/24                     172.16.30.0/24
+                    eth2 : 10.10.11.1/30                        10.10.11.2/30
+
+                Now we should define Routes in IP -> Routes (in fact we introduce destination network gateway to the routers)
+
+                        router1                                     router2
+                    dstAddr : 172.16.30.0/24                    dstAddr : 192.168.200.0/24
+                    gateway : 10.10.11.2                        gateway : 10.10.11.1
+
+                if we had more than 2 routers we should introduce between routers routes too
+                in this situation router 3 dont know about route between router 2 and 1 and we should introduce it
+                also router1 dont know about R2 and R3 route and we should introduce it 
+                    <span class="shape">
+                    LAN 1<------------> Router 1 <---------> Router 2 <---------> Router 3 <------------> LAN 2
+                    </span>
+                    router 1                router 2                    router 3
+                    lan 2 : R2              lan 2 : R3                  lan 1 : R2 
+                    R2-R3 : R2              lan 1 : R1                  R1-R2 : R2
+                        
+                   
+    <span class="head2">DHCP Server</span>
+        for run DHCP Server on router
+        IP -> DHCP Server -> Select DHCP Setup -> eth : Select Network eth we want use dhcp on it
+                                                DHCP Address Space : fill automatically
+                                                Gateway : fill automatically
+                                                Give out : Select DHCP IP Range
+                                                DNS : if we want assign DNS to clients
+                                                Lease Time : lease time
+        In this menu we can use Lease tab to see leased ip and clients 
+        and we can use make static button to give a client static ip address
+
+
+    <span class="head2">DHCP Client</span>
+        if we have a DHCP Server on Network and we want to mikrotik use it
+        IP -> DHCP Client -> + -> Interface : select eth that dhcp on it
+
+
+    <span class="head2">DHCP Relay</span>
+        if we have a DHCP Server on Network and we want mikrotik use it to give ip to other network clients
+        IP -> DHCP Relay -> + -> Interface : eth that dhcp Server is on it 
+                                DHCP Server : DHCP Server ip address
+
+
+    <span class="head2">Deliver Internet On Mikrotik Router</span>
+        for delivering internet to mikrotik router we have two option 
+
+        first option our modem config as pppoe ->
+            use DHCP Client
+                    IP -> DHCP Client -> eth that modem on it 
+            then declear NAT ->
+                    IP -> Firewall -> NAT -> + -> chain : srcnat
+                                                action : masquerade
+        
+        second option our modem config as bridge ->
+            declear pppoe on mikrotik to dial ISP 
+                Interface -> + -> pppoe client -> internet : eth that modem connect
+                                                dial out : ISP user and pass -> check default route
+                                                pppoe scan -> for check connnect to ISP
+
+
+    <span class="head2">PPPoE Server</span>
+        for make clients use internet by connection use this
+        first Deliver Internet to Mikrotik with one of previous options
+        PPP -> PPPoE Server -> + -> interface : eth that our network connected to it
+                                    profile : what profile for this PPPoE Server 
+                                            we make a profile to use here
+                                                    PPP -> Profile -> + -> local : network ip range or dhcp pool
+                                                                        remote : ip pool that clients get after connect to PPPoE Server
+                                                                                    for Create IP Pool we use IP -> IP Pool
+        for declear user pass for connect to PPPoE Server
+            PPP -> Secret -> + -> Name : username
+                                password : password
+                                Service : pppoe
+                                profile : created profile
+        now we shold create a nat for new addresses to access internet
+            IP -> Firewall -> NAT -> + -> chain : srcnat
+                                        src addr : ip pool of PPPoE Server
+                                        action : masquerade
+
+
+    <span class="head2">Hotspot</span>
+        its like pppoe server but clients no need connect with connection and they login with web browser
+        first Deliver Internet to Mikrotik with one of previous options
+        IP -> Hotspot -> Select Hotspot Setup -> interface : eth of network
+                                                local address on network : fill automatically
+                                                    if check masquerade NAT create automatically
+                                                address pool : fill automatically -> network address pool
+                                                certificate : none 
+                                                SMTP : 0.0.0.0
+                                                DNS Name : Login page address 
+                                                local Hotspot user : user and pass of hotspot admin
+        after config hotspot winbox automatically logout and we first must login throgh web
+        for create Users    
+            IP -> Hotspot -> User Tab 
+            in user profile we can set things
+            in Active logined user show
+        for exception user from login like printers 
+            Hotspot -> IP Binding -> + -> MAC or IP 
+                                        Server : created hotspot
+                                        type : bypass
+
+
+    <span class="head2">Web Proxy</span>
+        for restrict internet use we use it
+        first use NAT to give all requests to mikrotik
+            Firewall -> NAT -> + -> chain : dstnat
+                                    src addr : network address
+                                    protocol : tcp 
+                                    dst port : 80
+                                    Action -> action : redirect , toport : 8080
+        now active Web Proxy
+            IP -> Web Proxy -> check Enable
+                            src address : network address
+                            port : 8080
+        now declear rules by select Access in this menu and click +
+            src addr : empty mean all
+            path : *.rar for file type
+            dst host : www.google.com 
+            action : deny
+
+
+    <span class="head2">Virtual AP</span>
+        cretae virtual APs for distinict main AP from those
+        users that connect to Virtual AP is out of mai network by other ip range
+            Interface -> + -> Virtual AP -> SSID : name of ssid
+                                            Master Interface : when we have multi Wlan specific master here
+                                            Security Profile : for SSID passwords and ... 
+        Now from IP -> Address make different address or DHCP for this virtual AP 
+
+
+    <span class="head2">Filtering</span>
+        we use filter section to restrict requests
+            input mean from out to in
+            output mean from in to out
+            forward mean from eth to eth in one router
+        for block access one eth to another eth 
+            IP -> Firewall -> Mangle -> chain : prerouting
+                                        src : eth1 address
+                                        dst : eth2 address
+                                        action : mark-packet
+                                        new packet mark : a name
+            now in firewall make a rule type of forward that drop this packet-mark
+
+
+    <span class="head2">Notes</span>
+        Source NATs will transfer internal request to out by replacing router ip as source ip
+        Destination NATs transfer outgoing request to in by replacing client ip as destination ip
+
+    </pre>
+</body>
+
+</html>
