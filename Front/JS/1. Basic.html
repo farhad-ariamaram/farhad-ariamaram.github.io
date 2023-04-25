@@ -1,0 +1,125 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Front -> JS -> Basic</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: forestgreen;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .code {
+            color: dodgerblue;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># Basic</span>
+
+    <span class="head2">Using</span>
+        <span class="head3">use on page :</span>
+            <xmp style="display: inline;color: dodgerblue;"><script type="text/javascript">...</script></xmp>
+        <span class="head3">use external :</span>
+            <xmp style="display: inline;color: dodgerblue;"><script src="filename.js"></script></xmp>
+
+    <span class="head2">variable</span>
+        for define variables in js we use var keyword
+        and with assign value type will set automatically
+            <span class="code">var b = "init"; 
+            var d = 1;    
+            var f = false;
+            var h = function(){};</span>
+        we can use const keyword for define constants
+            <span class="code">const PI = 3.14;</span>
+        we can use let keyword for define variable with block scope
+            <span class="code">let z = 'zzz';</span>
+        values that we assign to variables can be
+            <span class="shape">false, true                     // boolean
+            18, 3.14, 0b10011, 0xF6, NaN    // number
+            "flower", 'John'                // string
+            undefined, null , Infinity      // special</span>
+
+    <span class="head2">Object Data Type</span>
+        object is data type like class objects in oop define like below
+            <span class="code">var student = {
+                firstName:"Jane",           // list of properties and values
+                lastName:"Doe",
+                age:18,
+                height:170,
+                fullName : function() {     // object function
+                    return this.firstName + " " + this.lastName;
+                }
+            }; </span>
+        and access object properties like below
+            <span class="code">student.age = 19;           // setting value
+            student[age]++;             // incrementing
+            name = student.fullName();  // call object function</span>
+
+    <span class="head2">Array</span>
+        <span class="head3">define</span>
+            <span class="code">var dogs = ["Bulldog", "Beagle", "Labrador"]; 
+            var dogs = new Array("Bulldog", "Beagle", "Labrador");</span>
+        <span class="head3">access and assign</span>
+            <span class="code">alert(dogs[1]);
+            dogs[0] = "Bull Terier";</span>
+        <span class="head3">get array length</span>
+            <span class="code">dogs.length</span>
+        <span class="head3">functions on arrays</span>
+            <span class="shape">>dogs.toString();                        // convert to string: results "Bulldog,Beagle,Labrador"
+            dogs.join(" * ");                       // join: "Bulldog * Beagle * Labrador"
+            dogs.pop();                             // remove last element
+            dogs.push("Chihuahua");                 // add new element to the end
+            dogs[dogs.length] = "Chihuahua";        // the same as push
+            dogs.shift();                           // remove first element
+            dogs.unshift("Chihuahua");              // add new element to the beginning
+            delete dogs[0];                         // change element to undefined (not recommended)
+            dogs.sort();                            // sort string alphabetically
+            dogs.reverse();                         // sort string in descending order</span>
+
+    <span class="head2">loops in js</span>
+        <span class="code">for (var i of theArray) {}
+        theArray.forEach(element => {});</span>
+
+    <span class="head2">Modern-JS</span>
+        <span class="code">"use strict";</span> 
+
+    </pre>
+</body>
+
+</html>

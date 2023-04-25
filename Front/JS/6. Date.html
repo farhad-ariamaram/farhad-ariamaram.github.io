@@ -1,0 +1,91 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Front -> JQuery -> Date</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: forestgreen;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .code {
+            color: dodgerblue;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># Date</span>
+
+    <span class="head2">get current date & time</span> 
+        <span class="code">var d = new Date();     // output -> Thu Apr 20 2023 11:50:34 GMT+0330 (Iran Standard Time)</span>
+        for convert it to miliseconds passed since 1970
+            <span class="code">Number(d);</span>
+
+    <span class="head2">declear a date</span>
+        <span class="shape">Date("2017-06-23");
+        Date("2017");           // day and month is set to 01 Jan
+        Date("June 23 2017");   // long date format
+        Date("2017-06-23T12:00:00-09:45");  // date - time YYYY-MM-DDTHH:MM:SSZ
+        Date("Jun 23 2017 07:45:00 GMT+0100 (Tokyo Time)"); // time zone</span>
+
+    <span class="head2">get time from a date</span> 
+        <span class="shape">d.getDay();           // getting the weekday
+            getDate();          // day as a number (1-31)
+            getFullYear();      // four digit year (yyyy)
+            getHours();         // hour (0-23)
+            getMilliseconds();  // milliseconds (0-999)
+            getMinutes();       // minutes (0-59)
+            getMonth();         // month (0-11)
+            getSeconds();       // seconds (0-59)
+            getTime();          // milliseconds since 1970</span>
+
+    <span class="head2">get/set time from a date</span> 
+        <span class="shape">d.setDate(d.getDate() + 7); // adds a week to a date
+            setDate();                // day as a number (1-31)
+            setFullYear();            // year (optionally month and day)
+            setHours();               // hour (0-23)
+            setMilliseconds();        // milliseconds (0-999)
+            setMinutes();             // minutes (0-59)
+            setMonth();               // month (0-11)
+            setSeconds();             // seconds (0-59)
+            setTime();                // milliseconds since 1970</span>
+    </pre>
+</body>
+
+</html>

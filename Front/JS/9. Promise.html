@@ -1,0 +1,78 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Front -> JQuery -> Promise</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: forestgreen;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .code {
+            color: dodgerblue;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># Promise</span>
+
+    Promise is used for async functions in js
+    its like call back but is better
+    
+    for declear a promise
+        <span class="code">var promise = new Promise(function(resolve, reject){
+            //do something
+        });</span>
+    and declear in it when should call resolve and when should call reject
+        <span class="code">if(things was ok) {
+            resolve();
+        } else {
+            reject();
+        }</span>
+    and then call promise and use then and catch
+        <span class="code">promise.then(function (result) {
+            console.log('Promise is successfully.');
+        }).
+        catch(function (err) {
+            console.log('Some error has occured');
+        });</span>
+    </pre>
+</body>
+
+</html>

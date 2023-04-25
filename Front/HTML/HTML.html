@@ -1,0 +1,146 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Front -> HTML</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: forestgreen;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .code {
+            color: dodgerblue;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># HTML</span>
+
+    <span class="head2">Robots.txt</span>
+        <span class="code">User-agent: *
+        Disallow: /dont-index-this-folder/
+        Sitemap: https://htmlcheatsheet.com/sitemap.xml</span>
+
+    <span class="head2">head-tags</span>
+        <xmp style="display: inline;color: dodgerblue;"><head>
+            <meta charset="utf-8">
+            <meta http-equiv="x-ua-compatible" content="ie=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="canonical" href="https://htmlcheatsheet.com/" />
+            <title>HTML CheatSheet</title>
+            <meta name="description" content="A brief page description">
+            <meta name="keywords" content="html,cheatsheet" />
+            <link rel="apple-touch-icon" href="apple-touch-icon.png">
+            <link rel="alternate" hreflang="es" href="https://htmlcheatsheet.com/spanish/" />
+            <link rel="stylesheet" href="/styles.css">
+        </head></xmp>
+
+    <span class="head2">Open Graph</span> 
+        <xmp style="display: inline;color: dodgerblue;"><meta property="og:title" content="Cheat Sheet" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://htmlcheatsheet.com/" />
+        <meta property="og:image" content="https://htmlcheatsheet.com/demo.jpg" />
+        <!-- optional -->
+        <meta property="og:audio" content="https://htmlcheatsheet.com/track.mp3" />
+        <meta property="og:description" content="A brief description" />
+        <meta property="og:determiner" content="the" />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="es_ES" />
+        <meta property="og:site_name" content="HTML CheatSheet" />
+        <meta property="og:video" content="https://htmlcheatsheet.com/video.swf" /></xmp>
+
+    <span class="head2">HTML5</span>
+        <span class="head3">Tags :</span>
+            <xmp style="display: inline;color: dodgerblue;"><header> and <footer>
+            <nav>       <!-- all menus-->
+            <aside>     <!-- aside menus -->
+            <article>   <!-- blog posts -->
+            <section>
+            <audio> and <video>
+            <canvas>    <!-- draw objects -->
+            <embed>     <!-- use external page or content --></xmp>
+        <span class="head3">Features :</span>
+            Application Cache for offline view
+            GPS 
+            Drag and Drop
+            play audio and video
+            
+
+    <span class="head2">.htaccess</span>
+        <span class="code">Force HTTPS
+            RewriteEngine on
+            RewriteCond %{HTTPS} !on
+            RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+        Force www
+            RewriteEngine on
+            RewriteCond %{HTTP_HOST} ^htmlg\.com [NC]
+            RewriteRule ^(.*)$ http://www.htmlg.com/$1 [L,R=301,NC]
+        Force non-www
+            RewriteEngine on
+            RewriteCond %{HTTP_HOST} ^www\.htmlg\.com [NC]
+            RewriteRule ^(.*)$ http://htmlg.com/$1 [L,R=301]
+        Custom Error Pages
+            ErrorDocument 500 "Sorry, something went wrong!"
+            ErrorDocument 401 https://htmlg.com/404/
+            ErrorDocument 404 404error.html
+        Redirect Entire Site
+            Redirect 301 / https://htmlg.com/
+        Permanent Page Redirect
+            Redirect 301 /oldlink.html https://htmlg.com/help/
+            Redirect 301 /oldlink https://htmlg.com/about/
+        Alias Directory
+            RewriteEngine On
+            RewriteRule ^source_directory/(.*) target_directory/$1
+        Remove .php Extension
+            RewriteEngine On
+            RewriteCond %{SCRIPT_FILENAME} !-d
+            RewriteRule ^([^.]+)$ $1.php [NC,L]
+        Block IP Address
+            Order deny,allow
+            Allow from all
+            Deny from 123.123.123.123
+            Deny from 123.123.123.123
+        Allow Access From Only One IP
+            # Require all denied
+            # Require ip 123.123.123.123</span>
+
+    </pre>
+</body>
+
+</html>

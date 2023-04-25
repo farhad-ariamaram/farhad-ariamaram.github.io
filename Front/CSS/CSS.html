@@ -1,0 +1,191 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Front -> CSS</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: forestgreen;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .code {
+            color: dodgerblue;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># CSS</span>
+
+    <sapn class="head2">Include CSS</sapn>
+        <span class="code"><xmp style="display: inline;color: dodgerblue;"><link rel="stylesheet" type="text/css" href="/style.css" /></xmp></span>
+
+    <sapn class="head2">Syntax</sapn>
+        <span class="code">selector{
+            property: value;
+            property2: value2;
+        }</span>
+
+    <sapn class="head2">Selectors</sapn>
+        <span class="shape">*               all elements
+        div             all div tags
+        div,p           all divs and paragraphs
+        div p           paragraphs inside divs
+        div > p         all p tags, one level deep in div
+        div + p         p tags immediately after div
+        div ~ p         p tags before by div
+        .classname      all elements with class
+        #idname         element with ID
+        div.classname   divs with certain classname
+        div#idname      div with certain ID
+        #idname *       all elements inside #idname</span>
+
+    <sapn class="head2">Pseudo Classes</sapn>
+        <span class="shape">a:link                      link in normal state
+        a:active                    link in clicked state
+        a:hover                     link with mouse over it
+        a:visited                   visited link    
+        p::after{content:"yo";}     add content after p
+        p::before                   add content before p</span>
+
+    <sapn class="head2">Attribute Selector</sapn>
+        <span class="shape">a[target]               a tag with a target attribute
+        a[target="_blank"]      a tag which open in new tab
+        [class^="chair"]        class starts with chair
+        [class|="chair"]        class starts with the chair word
+        [class*="chair"]        class contains chair
+        [class$="chair"]        class ends with chair
+        input[type="button"]    specified input type</span>
+
+    <sapn class="head2">Media Query</sapn>
+        <span class="code">@media not|only mediatype and (media feature) {
+            CSS Codes 
+        }</span>
+
+        <span class="head3">Media types : </span>
+            <span class="code">all, print, screen, speech</span>
+
+        <span class="head3">Media features :</span>
+            <span class="shape">width           viewport width
+            height          viewport height
+            orientation     orientation of the viewport
+            aspect-ratio    ratio between width & height
+            color           number of bits per color
+            color-index     number of displayable colors
+            monochrome      color on greyscale device
+            resolution      resolution of the device
+            scan            scanning process of the device
+            grid            device is a grid or bitmap</span>
+
+        <span class="head3">Examples :</span>
+            <span class="code">@media screen and (max-width: 480px) { }
+            @media screen and (max-width: 600px), (max-height: 500px) {
+            @media print { ... }</span>
+
+        <span class="head3">Link external file with media query</span>
+            <span class="code"><xmp style="display: inline;color: dodgerblue;"><link rel="stylesheet" media=mediatype and|not|only (media feature href="mystylesheet.css"></xmp></span>
+
+    <sapn class="head2">Some Properties</sapn>
+        <span class="shape">background                  all background properties in one declaration
+            background-attachment   is the background image fixed or scrolls
+            background-blend-mode   blending mode of each background layer
+            background-clip         painting area of the background
+            background-color        background color
+            background-image        background image
+            background-origin       where the background image is positioned
+            background-position     starting position of the background image
+            background-repeat       the way the background image is repeated
+            background-size         background image size
+
+        border                          sets all border properties in one line
+            border-bottom               bottom border properties in one line
+            border-bottom-color         color of the bottom border
+            border-bottom-left-radius   border bottom left radius
+            border-bottom-style         border bottom style
+            border-bottom-width         border bottom width
+            border-collapse             border collapse
+            border-color                border color
+            border-image                sets an image as border
+            border-width                border width
+
+        color   text color
+
+        z-index     stack order of the element
+
+        @font-face              declare non-web-safe fonts
+        font                    all font properties in one line
+            font-family         font of the element
+            font-size           font size
+            font-size-adjust    control font size if the first declared option is not available
+            font-stretch        widen or narrow text
+            font-style          font style: normal, italic, oblique
+            font-variant        set small-caps
+            font-weight         use bold or thin characters
+
+        margin                  set the top, right, bottom and left margins in one line
+            margin-bottom       bottom margin
+
+        max-height          maximum height of element
+        max-width           maximum width of element
+        min-height          minimum height
+        min-width           minimum width
+
+        overflow        hide, display or scroll if the content overflows its container
+            overflow-x  horizontal overflow
+            overflow-y  vertical overflow
+
+        padding                 padding between the element border and content
+            padding-bottom      padding bottom
+
+        position    positioning type: absolute, fixed, relative, static
+
+        right   right offset for relative and absolute elements
+        top     top offset for relative and absolute elements
+        left    left offset for relative and absolute elements
+        bottom  bottom offset for relative and absolute elements
+
+        text-align          horizontal alignment of text
+        text-decoration     overline, underline or line-through the text
+        text-overflow       the way how overflowed content is marked (ellipsis)
+        text-shadow         text shadow
+        text-transform      capitalization of text</span>
+
+    </pre>
+</body>
+
+</html>

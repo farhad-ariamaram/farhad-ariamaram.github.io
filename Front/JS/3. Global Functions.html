@@ -1,0 +1,87 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Front -> JQuery -> Global Functions</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: forestgreen;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .code {
+            color: dodgerblue;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># Global Functions</span>
+
+    <span class="head2">Delay</span>
+        run code with a delay
+            <span class="code">setTimeout(function () {
+                //codes here
+            }, 1000);</span>
+
+    <span class="head2">Alert</span>
+        <span class="code">alert(msg);</span>
+
+    <span class="head2">get user input</span>
+        yes/no dialog, returns true/false depending on user click
+            <span class="code">confirm("Really?");</span>
+        input dialog. Second argument is the initial value
+            <span class="code">prompt("Your age?","0");</span>
+
+    <span class="head2">Others</span>
+        <span class="shape">eval();                     // executes a string as if it was script code
+        String(23);                 // return string from number
+        (23).toString();            // return string from number
+        Number("23");               // return number from string
+        decodeURI(enc);             // decode URI. Result: "my page.asp"
+        encodeURI(uri);             // encode URI. Result: "my%page.asp"
+        decodeURIComponent(enc);    // decode a URI component
+        encodeURIComponent(uri);    // encode a URI component
+        isFinite();                 // is variable a finite, legal number
+        isNaN();                    // is variable an illegal number
+        parseFloat();               // returns floating point number of string
+        parseInt();</span>
+
+    </pre>
+</body>
+
+</html>
