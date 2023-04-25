@@ -1,0 +1,216 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADO .NET</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: dodgerblue;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .text {
+            color: forestgreen;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># ADO .NET</span>
+
+
+    <span class="head2">BASIC</span>
+
+        SqlConnection connection = new SqlConnection();
+        try
+        {
+            <span class="text">//SET CONNECTCTION STRING</span>
+
+                <span class="text">//DIRECT </span>
+                connection.ConnectionString = "Server=(LocalDb)\\MSSQLLocalDB;Database=testDB;Trusted_Connection=True;";
+
+                <span class="text">//USE SETTINGS KEY_VALUE</span>
+                connection.ConnectionString = Properties.Settings.Default["CS"].ToString();
+
+            <span class="text">//SET QUERY</span>
+
+                <span class="text">//DIRECT</span>
+                string query = "INSERT INTO t1 (f2,f3) VALUES (2,3)";
+
+                <span class="text">//BY PARAMETERS</span>
+                string query = "INSERT INTO t1 (f2,f3) VALUES (@value1,@value2)";
+
+                <span class="text">//BY STORED PROCEDURE</span>
+                string query = "[dbo].[insert_t1_usp]";
+
+                <span class="text">//TYPE OF QUERIES</span>
+
+                    <span class="text">//NonQuery : JUST RETURN AFFECTED ROW(S)</span>
+                    string query_NonQuery = "[dbo].[insert_t1_usp]";
+
+                    <span class="text">//FetchData : RETURN VALUES</span>
+                    string query_FetchData = "SELECT * FROM t1";
+
+                    <span class="text">//Scalar : RETURN NUMBER LIKE COUNT OR AVG</span>
+                    string query_Scalar = "[dbo].[count_t1_usp]";
+
+
+                <span class="text">//SET SQLCOMMAND</span>
+                SqlCommand command = new SqlCommand(query, connection);
+
+
+            <span class="text">//ASSIGN PARAMETERS</span>
+                <span class="text">//ASIGN PARAMETERS IF SET QUERY BY PARAMETERS</span>
+                command.Parameters.AddWithValue("@value1","f2value");
+                command.Parameters.AddWithValue("@value2","f3value");
+
+                <span class="text">//ASSIGN PARAMETERS IF SET QUERY BY STORED PROCEDURE</span>
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@f2","f2value");
+                command.Parameters.AddWithValue("@f3","f3value");
+
+
+            <span class="text">//OPEN CONNECTCTION</span>
+                connection.Open();
+
+
+            <span class="text">//RECEIVE OUTPUT</span>
+
+                <span class="text">//NON QUERY</span>
+                    int rowAffected = command.ExecuteNonQuery();
+                    if (rowAffected > 0)
+                    {
+                        Console.WriteLine($"{rowAffected} row affected");
+                    }
+                    else
+                    {
+                        Console.WriteLine("no row affected");
+                    }
+
+                <span class="text">//FETCH DATA</span>
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            <span class="text">//ACCESS DATA WITH reader[INDEX] THAT INDEX STAND FOR COLUMN INDEX IN TABLE</span>
+                            var myString = reader[0].ToString();    //COL 1
+                            var myString = reader[1].ToString();    //COL 2
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("no data to read");
+                    }
+
+                <span class="text">//SCALAR</span>
+                    var scalarOutput = command.ExecuteScalar();
+                    if (scalarOutput != null)
+                    {
+                        Console.WriteLine($"{(int)scalarOutput} is count of t1");
+                    }
+                    else
+                    {
+                        Console.WriteLine("no output");
+                    }
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine($"sql error {ex.ToString()}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"program error {ex.ToString()}");
+        }
+        finally
+        {
+            connection.Close();
+        }
+
+
+
+    <span class="head2">DATASET</span>
+
+        <span class="text">//DATASET IS IN MEMORY</span>
+
+            <span class="text">//CREATE DATASET OBJECT</span>
+                DataSet dsEmployeeGroup = new DataSet();
+
+            <span class="text">//SET SQL DATA ADAPTER</span>
+                SqlDataAdapter da = new SqlDataAdapter(cmd); //cmd is SqlCommand that fetched data like SELECT * FROM ...
+            
+            <span class="text">//FILL DATASET WITH DATA</span>
+                da.Fill(dsEmployeeGroup);
+
+            <span class="text">//CONNECT DATASET TO A DATAGRIDVIEW</span>
+                gridEmployeeGroup.DataSource = dsEmployeeGroup.Tables[0];
+
+
+
+    <span class="head2">STORED PROCEDURE</span>
+
+        <span class="text">//Create StoredProcedure</span>
+            USE [DBName]
+            GO
+            SET ANSI_NULLS ON
+            GO
+            SET QUOTED_IDENTIFIER ON
+            GO
+            CREATE PROCEDURE usp_mysp_test 
+                -- Add the parameters for the stored procedure here
+                @Param1 INT = 0     -- 0 is default value
+            AS
+            BEGIN
+                -- statements for procedure here
+                SELECT * FROM TblEmployee WHERE EmployeeGroupID=@Param1
+            END
+            GO
+
+
+
+    <span class="head2">VIEW</span>
+
+        <span class="text">//CREATE VIEW</span>
+        use SqlManagementStudio wizard or
+            USE [DBName]
+            GO
+            SET ANSI_NULLS ON
+            GO
+            SET QUOTED_IDENTIFIER ON
+            GO
+            CREATE VIEW [dbo].[View_Name]
+            AS
+            SELECT        *
+            FROM          HR.Employee
+            GO
+
+
+
+    <span class="head2">REPORT</span>
+        Report rpt = new Report();
+        rpt.Load("/reportName.frx");
+        rpt.Show(this);
+        
+</pre>
+
+</body>
+
+</html>
