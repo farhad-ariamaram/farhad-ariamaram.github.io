@@ -1,0 +1,94 @@
+# Intent
+
+    - Start Explicit Activity
+        Intent intent = new Intent(QuizActivity.this, CheatActivity.class);
+        startActivity(intent);
+
+    - Put Extra 
+        //first and second activity class level
+        private static final String EXTRA_ANSWER_IS_TRUE = "com.bignerdranch.android.geoquiz.answer_is_true";
+        //first activity
+        intent.putExtra(EXTRA_ANSWER_IS_TRUE, answerIsTrue);
+        //second activity
+        getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
+
+    - StartActivityForResult
+        first need a RequestCode in first activity
+            //first activity class level
+            private static final int REQUEST_CODE_CHEAT = 0;     
+
+        start second activity with startActivityForResult and set requestCode
+            startActivityForResult(intent, REQUEST_CODE_CHEAT);
+
+        in second activity make setResult
+            setResult(RESULT_OK); //RESULT_OK and RESULT_CANCEL we can use
+            finish(); //for back to first activity after set result
+        and we receive it in first activity onActivityResult()
+            if (resultCode == Activity.RESULT_OK)
+        NOTE: if we wont setResult it automatically be RESULT_CANCEL
+
+        we can also send data across with setResult (EXTRA_ANSWER_SHOWN is a key decleared in two activities)
+            Intent data = new Intent();
+            data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
+            setResult(RESULT_OK, data);
+        and receive data in first activity onActivityResult()
+            if (data != null) {
+                mIsCheater = data.getBooleanExtra(EXTRA_ANSWER_SHOWN, false);
+            }
+
+    - Implicit Intent
+        to make an activity capable for Implicit Intent we use following code in activity manifest
+            <activity android:name=".BrowserActivity" android:label="@string/app_name" android:exported="true" >
+                <intent-filter> 
+                    <action android:name="android.intent.action.SEND" />    //what can do?
+                    <category android:name="android.intent.category.DEFAULT" /> //this is tell os i can do
+                    <data android:mimeType="image/*" /> //what data can i parse
+                </intent-filter>
+            </activity>
+            
+        to send an Implicit Intent we use following code
+            Intent i = new Intent(Intent.ACTION_SEND);  //what i want
+            i.setType("text/plain");    //waht data i want to be parsed
+            i.putExtra(Intent.EXTRA_TEXT, "SOME TEXT");    // extras are different based on action
+            i.putExtra(Intent.EXTRA_SUBJECT, "SOME TEXT"); 
+            startActivity(i);
+
+        sometimes user has set default app for doing something
+        if you want user choose from list even if he chose default, we should start Implicit Intent with following code
+            i = Intent.createChooser(i, getString(R.string.send_report)); //second parameter is title of chooser
+
+        if we start and Implicit intent for choose something (like contacts for choose a person from that)
+        we should using startActivityForResult
+            private static final int REQUEST_CONTACT = 1;
+            Intent pickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+            startActivityForResult(pickContact, REQUEST_CONTACT);
+        and receive data with following code
+            public void onActivityResult(int requestCode, int resultCode, Intent data) {
+                if (requestCode == REQUEST_CONTACT && data != null) {
+                    Uri contactUri = data.getData();
+                    String[] queryFields = new String[] {ContactsContract.Contacts.DISPLAY_NAME};
+                    Cursor c = getActivity().getContentResolver().query(contactUri, queryFields, null, null, null);
+                    try { 
+                        if (c.getCount() == 0) { return; }
+                        c.moveToFirst(); 
+                        String suspect = c.getString(0); 
+                        Toast.makeText(this, suspect, Toast.LENGTH_SHORT).show();
+                    } finally { c.close(); } 
+                }
+            }
+        if user device does not have contact app our app will crash
+        for be sure that user have contact app we use following code
+            PackageManager packageManager = getActivity().getPackageManager(); 
+            if (packageManager.resolveActivity(pickContact, PackageManager.MATCH_DEFAULT_ONLY) == null) { 
+                //don't allow run pick contact
+            }
+
+    - Take Photo with camera intent
+        we use abobe concept to take picture with Implicit intent and save it on app private directory
+            private static final int REQUEST_PHOTO= 2; 
+            Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (mPhotoFile == null && !captureImage.resolveActivity(packageManager)){
+                //device can't take photo
+                return;
+            }
+            startActivityForResult(captureImage, REQUEST_PHOTO);

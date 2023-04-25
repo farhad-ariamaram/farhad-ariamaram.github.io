@@ -1,0 +1,20 @@
+# Activity Lifecycle
+
+    START_APP -> A:onCreate() -> A:onStart() -> A:onResume()
+    GOTO_ACTIVITY_B -> A:onPause() -> B:onCreate() -> B:onStart() -> B:onResume() -> A:onStop()
+    BACK_PRESSED_FROM_B -> B:onPause() -> A:onRestart() -> A:onStart() -> A:onResume() -> B:onStop() -> B:onDestroy()    
+    HOME_PRESSED_FROM_A -> A:onPause() -> B:onStop() -> BACK_TO_APP_FROM_A -> A:onRestart() -> A:onStart() -> A:onResume()
+    NAVIGATE_UP_FROM_A_TO_B -> A:onPause() -> B:onDestroy() -> B:onCreate() -> B:onStart() -> B:onResume() -> A:onStop() -> A:onDestroy() 
+    LOCK_DEVICE_FROM_A -> A:onPause() -> A:onStop() -> UNLOCK_DEVICE_FROM_A -> A:onStart() -> A:onResume() 
+    GOTO_APP_RECENT_FROM_A -> A:onPause() -> A:onStop() -> CLEAR_FROM_RECENT_APP_FROM_A -> A:onDestroy()
+                                                        -> BACK_TO_APP_FROM_A -> A:onRestart() -> A:onStart() -> A:onResume()
+
+    1. Back Destroy Activity But Home not
+    2. partial screen activity put another onPause() full screen put another onStop()
+    3. onStop and onPause might kill by OS for RAM
+
+    - onCreate()
+        inflating widgets and putting them on screen (in the call to setContentView(int))
+        wire up widgets
+        setting listeners on widgets to handle user interaction
+        connecting to external model data

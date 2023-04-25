@@ -1,0 +1,44 @@
+# Widgets
+
+    - Attributes
+        - android:layout_width and android:layout_height
+            match_parent (view will be as big as its parent)
+            wrap_content (view will be as big as its contents require)
+            0dp (fill remain space) // just in ConstraintLayout with constraint
+        - android:orientation 
+            for LinearLayout accept horizontal and vertical
+        - android:id="@+id/true_button"
+        - android:gravity="center"
+            for LinearLayout set child widgets positions
+        - android:layout_gravity="bottom|right" or android:layout_gravity="center_vertical|center_horizontal" or android:layout_gravity="center_horizontal"
+            for FrameLayout's children set own positions by gravity (apply to children)
+
+    - Widget Icon
+        put .png or .jpg files in src/main/res/drawable (id generated automatic)
+        make screen density by folders drawable-hdpi, drawable-mdpi, drawable-xhdpi, and drawable-xxhdpi
+        use in widget by following codes
+        - android:src="@drawable/arrow_right" 
+            example use in button or imageView
+        - android:drawableRight="@drawable/arrow_right" 
+            example use in image button   
+
+    - Listener 
+        - Checkbox
+            setOnCheckedChangeListener
+        - EditText
+            addTextChangedListener
+        - Button (and other)
+            setOnClickListener
+
+    - Wiring Up Widgets
+        private Button mTrueButton; (class level)
+        mTrueButton = findViewById(R.id.true_button); (onCreate method level)
+
+
+
+    
+
+     
+        
+        
+         

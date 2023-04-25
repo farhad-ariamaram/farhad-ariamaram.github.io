@@ -1,0 +1,57 @@
+# Device configurations
+
+    Device configurations change can Destroy and re-create Activities
+    such as screen orientation, language, and multi-window mode
+
+    - Lifecycle on Configuration Change
+        when device configuration change, following lifecycle will occur
+        onPause -> onStop -> onDestroy -> OnCreate -> onStart -> onResume
+        to avoid configuration change should add following code in manifest activity
+            android:configChanges="keyboardHidden|orientation|screenSize"
+
+    - Saving Data on configurations change with Bundle
+        if configuration change, onSaveInstanceState and onRestoreInstanceState will call
+        and we can save and restore data with it
+        for using that, first we override both methods and create a key on class level
+                private static final String KEY_INDEX = "index"; (activity class level)
+        then save value in onSaveInstanceState with following code
+            savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+        and restore in onRestoreInstanceState with following code
+            savedInstanceState.getInt(KEY_INDEX, 0); 
+        Note: if we prevent configuration change in manifest with android:configChanges
+              this methods won't call
+
+    - Different Configurations
+        if we want have different layout for different configuration we should use layou directories with
+        configuration name like
+            layout      -> for default layouts
+            layout-land -> for landscape layouts
+        if a layout be in two directory (with same name) 
+        for portrait use first and for lands use second directory layout
+        and if a layout just in first folder for both situation use first layout
+        Note: in android directory view mode it will create a directory with layout name 
+              and put both layout in that (on without config and second with -land config)
+        Note: when use sw for config ,for example if the screen is 1024x800
+              then sw is 800 and If the screen is 800x1024, sw is still 800
+
+    - Device Configuration List
+        device Configuration list based on Prioritizing:
+        1. mobile country code (MCC), optionally followed by mobile network code (MNC) 
+        2. language code, optionally followed by region code 
+        3. layout direction 
+        4. smallest width 
+        5. available width 
+        6. available height 
+        7. screen size 
+        8. screen aspect 
+        9. round screen (API level 23 and above) 
+        10. screen orientation 
+        11. UI mode 
+        12. night mode 
+        13. screen density (dpi) 
+        14. touchscreen type 
+        15. keyboard availability 
+        16. primary text input method 
+        17. navigation key availability 
+        18. primary non-touch navigation method 
+        19. API level

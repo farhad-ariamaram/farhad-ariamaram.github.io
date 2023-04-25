@@ -1,0 +1,117 @@
+# ActionBar
+
+    Show/Hide ActionBar:
+        by default ActionBar show top off activities
+        for hide ActionBar in manifest use following in activity tag
+            android:theme="@android:style/Theme.NoTitleBar">
+            
+    Usage:
+        ActionBar are used for app icon, navigation, menu and SearchView
+        top right of ActionBar is reserved for menu
+
+    - ActionBar Menu 
+        first we need an menu resouece
+        right click on res directory → New → Android resource file
+            → Resource type = Menu
+            → enter a name
+        declear menu items with item tag
+            <menu xmlns:android="http://schemas.android.com/apk/res/android" 
+                                 xmlns:app="http://schemas.android.com/apk/res-auto"> 
+                <item 
+                    android:id="@+id/new_crime" 
+                    android:icon="@drawable/ic_menu_add" //can create with Image Asset with choose Action Bar and Tab Icons
+                    android:title="@string/new_crime" 
+                    app:showAsAction="ifRoom|withText" //ifRoom, withText, never, always
+                /> 
+            </menu> 
+
+        then override onCreateOptionsMenu()
+        (in fragment first we should use setHasOptionsMenu(true); code in OnCreate() of fragment)
+            //in activity
+            @Override 
+            public boolean onCreateOptionsMenu(Menu menu) { 
+                getMenuInflater().inflate(R.menu.action_bar_menu,menu);
+                return super.onCreateOptionsMenu(menu); 
+            } 
+
+            //in fragment
+            @Override 
+            public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) { 
+                super.onCreateOptionsMenu(menu, inflater); 
+                inflater.inflate(R.menu.fragment_crime_list, menu); 
+            }    
+
+        to respond menu item selecting we override onOptionsItemSelected()
+        @Override 
+        public boolean onOptionsItemSelected(MenuItem item) { 
+            switch (item.getItemId()) { 
+                case R.id.new_crime: 
+                    //do what need
+                    return true; 
+                default: 
+                    return super.onOptionsItemSelected(item); 
+            } 
+        }
+
+
+    - Navigation
+
+        for navigating up (from child activity to parent) we use Hierarchical navigation
+        (back button get back us to last where we was) 
+        
+        to enable that we should specify parent activity for child activity in manifest like below
+            <activity 
+                android:name=".ChildActivity" 
+                android:parentActivityName=".ParentActivity"> 
+            </activity>
+        with this change in ChildActivity's ActionBar a button apears (called Up Button) on left of ActionBar 
+        that bring us to ParentActivity directly even if other activities be on activity stack
+        that because Up Button automatically call intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        that tell OS to look for an existing instance of the activity in the stack
+        and if there is one, pop every other activity off the stack
+        also navigate up will completely re-created activity and data may lose
+
+    
+    - Subtitle
+        Subtitle is below of title in ActionBar with smaller font
+        for setting that we use below code
+            in fragment:
+                AppCompatActivity activity = (AppCompatActivity) getActivity(); 
+                activity.getSupportActionBar().setSubtitle("subtitle"); 
+            in activity:
+                getSupportActionBar().setSubtitle("subtitle");
+
+
+    - SearchView
+        a search bar that placed in action bar and create by following code
+            <item android:id="@+id/menu_item_search" 
+                android:title="@string/search" 
+                app:actionViewClass="android.support.v7.widget.SearchView" 
+                app:showAsAction="ifRoom" //show as magnifier in small screens like phones (land and port)
+            />
+
+        for catch user input we use following code in onCreateOptionsMenu
+            MenuItem searchItem = menu.findItem(R.id.menu_item_search); 
+            final SearchView searchView = (SearchView) searchItem.getActionView();
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() { 
+                @Override 
+                public boolean onQueryTextSubmit(String s) { 
+                    Log.d(TAG, "QueryTextSubmit: " + s);
+                    return true; 
+                }
+                @Override 
+                public boolean onQueryTextChange(String s) { 
+                    Log.d(TAG, "QueryTextChange: " + s); 
+                    return false; 
+                } 
+            });
+
+            //for persist last entered query on search bar
+            searchView.setOnSearchClickListener(new View.OnClickListener() { 
+                @Override 
+                public void onClick(View v) { 
+                    //QueryPreferences is a SharedPreferences that explain in SharedPreferences section
+                    String query = QueryPreferences.getStoredQuery(getActivity()); 
+                    searchView.setQuery(query, false); 
+                } 
+            });

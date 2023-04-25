@@ -1,0 +1,58 @@
+# Services
+
+    service has lifecycle that are 
+        onCreate
+        onStartCommand
+        onDestroy
+    onDestroy call based on service type that specify in return of onStartCommand and is 3 types
+        START_NOT_STICKY and START_REDELIVER_INTENT
+            stops when the service itself says it is done
+            You tell Android that you are done by calling stopSelf() or stopSelf(int)
+                stopSelf(), is unconditional. It will always stop your service
+                stopSelf(int) will only stop your service if this was the most recent start ID 
+            difference between START_NOT_STICKY and START_REDELIVER_INTENT
+                if the system needs to shut it down before it is done
+                START_NOT_STICKY service will die and disappear into the void. 
+                START_REDELIVER_INTENT will attempt to start up the service again later, when resources are less constrained.
+        START_STICKY
+            stays started until something outside the service tells it to stop by calling Context.stopService(Intent)
+        
+
+
+    Intent Service
+        start by intent and does commands in queue
+        if commands finish service will destroy 
+        declear like below
+            public class PollService extends IntentService { 
+                private static final String TAG = "PollService";
+                public static Intent newIntent(Context context) { 
+                    return new Intent(context, PollService.class); 
+                }
+                public PollService() { 
+                    super(TAG); 
+                }
+                @Override 
+                protected void onHandleIntent(Intent intent) { 
+                    //do things here
+                    Log.i(TAG, "Received an intent: " + intent); 
+                } 
+            }
+        and should declear in manifest
+            <application>
+                ...
+                <service android:name=".PollService" />
+            </application>
+        and start with following code
+            Intent i = PollService.newIntent(getActivity()); 
+            getActivity().startService(i);
+
+
+    Repeat With AlarmManager
+        not work
+
+
+
+
+
+
+

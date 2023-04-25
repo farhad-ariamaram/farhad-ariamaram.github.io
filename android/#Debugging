@@ -1,0 +1,32 @@
+# Debugging
+
+    - Logging
+        private static final String TAG = "QuizActivity"; (activity class level)
+        Log.d(TAG, "onCreate(Bundle) called"); 
+        .d -> debug
+        .w -> warning
+        .i -> info
+        .v -> verbose
+        .e -> error
+
+    - Logcat
+        show errors with red font also can filter with "FATAL EXCEPTION" phrase
+
+    - R.java Problems
+        problem in xml files can prevent creating R.java
+        use Clean and Re-Build project
+        use Lint
+        R.java problem can cause error related to resources
+
+    - Layout Inspector 
+        use for interactively inspect how a layout file is rendered to the screen
+        when app is running should select from monitor tool windows
+
+    - Profiler
+        recording memory allocations and cpu usage as you interact with your app
+        can find performance problem
+
+    - Layout Validation
+        when we are in xml layout edtor we can use View->Tool Windows->Layout Validation
+        that show all screen configuration states for current layout
+        like size, font size, land and port and ...

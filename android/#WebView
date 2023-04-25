@@ -1,0 +1,36 @@
+# WebView
+
+    after adding webview widget and find it in class 
+    we use following codes to use it
+        mWebView.getSettings().setJavaScriptEnabled(true); 
+        mWebView.setWebViewClient(new WebViewClient()); 
+        mWebView.loadUrl(mUri.toString());
+
+    - WebChromeClient
+        we can make our webview to WebChromeClient to use its features like progressbar and title and so on
+            mWebView = (WebView) v.findViewById(R.id.web_view); 
+            mWebView.getSettings().setJavaScriptEnabled(true); 
+            mWebView.setWebChromeClient(new WebChromeClient() { 
+                public void onProgressChanged(WebView webView, int newProgress) { 
+                    if (newProgress == 100) { 
+                        mProgressBar.setVisibility(View.GONE); 
+                    } else { 
+                        mProgressBar.setVisibility(View.VISIBLE); mProgressBar.setProgress(newProgress); 
+                    } 
+                }
+                public void onReceivedTitle(WebView webView, String title) { 
+                    AppCompatActivity activity = (AppCompatActivity) getActivity(); 
+                    activity.getSupportActionBar().setSubtitle(title); 
+                } 
+            }); 
+            mWebView.setWebViewClient(new WebViewClient()); 
+            mWebView.loadUrl(mUri.toString());
+
+    - Configuration Change
+        if any Configuration Change happen like screen rotation or keyboard visible 
+        page will reload again for solve this problem in webview or another views like video view 
+        we should use following code in manifest
+            <activity 
+                android:name=".SampleActivity" 
+                android:configChanges="keyboardHidden|orientation|screenSize" 
+            />

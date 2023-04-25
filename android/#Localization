@@ -1,0 +1,22 @@
+# Localization
+
+    - String.xml
+        path is in
+            res/values/strings.xml
+            for each language create a value folder like values-es (values-fa for persian)
+        make strings by
+            <string name="false_button">False</string>
+        use in xml by
+            @string/false_button (in XML)
+        use in java by
+            R.string.false_button (in java)
+
+    - RTL languages
+        use padding and margin with start and end for supporting RTL languages
+
+    - Detecting Local
+        for detect by timezone setting use following code
+            TimeZone.getDefault().getID()
+        and for detect by sim card information use following code
+            TelephonyManager tm = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
+            String countryCodeValue = tm.getNetworkCountryIso();

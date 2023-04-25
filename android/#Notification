@@ -1,0 +1,16 @@
+# Notification
+
+    when a service start it should notify user by Notification
+    in onHandleIntent we use following code
+        Intent i =  new Intent(this,LifecycleActivity.class);
+        PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
+        Notification notification = new NotificationCompat.Builder(this)
+                .setTicker(("Ticker"))
+                .setSmallIcon(android.R.drawable.ic_menu_report_image)
+                .setContentTitle("Title")
+                .setContentText("Content")
+                .setContentIntent(pi)
+                .setAutoCancel(true)
+                .build();
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(0, notification);

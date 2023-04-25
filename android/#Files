@@ -1,0 +1,116 @@
+# Files
+
+    - Private Folder (internal storage)
+        there is a folder for each application in /data/data/APP_PACKAGE_NAME
+        just the app can access this folder
+        for craete a file in that using following code
+            File directory = getFilesDir();
+            File file = new File(directory, "test.txt");
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } 
+        this file will created in /data/data/APP_PACKAGE_NAME/files/test.txt
+        other useful methods are
+            FilegetFilesDir() //returns a handle to the this directory
+            FileInputStreamopenFileInput(String name) //opens an existing file for input
+            FileOutputStreamopenFileOutput(String name, int mode) //opens a file for output, possibly creating it
+            FilegetDir(String name, int mode) //gets (and possibly creates) a subdirectory within the directory
+            String[]fileList() //gets a list of file names in the main files directory, such as for use with openFileInput(String)
+            FilegetCacheDir() returns a handle to a directory you can use specifically for storing cache files
+
+        - write in private folder by another app
+            if we want to get a file from another app and store it in our app private directory we should use File Provider
+            first we need declear a provider in application tag of manifest
+                <provider android:name="android.support.v4.content.FileProvider" 
+                        android:authorities="com.bignerdranch.android.criminalintent.fileprovider"
+                        android:exported="false"
+                        android:grantUriPermissions="true">
+                        <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/files"/> 
+                </provider>
+            then we need a xml file in xml/files.xml with just following code and no more code
+                <paths> <files-path name="crime_photos" path="."/> </paths> 
+            and use it like below code
+                Uri uri = FileProvider.getUriForFile(getActivity(), "com.bignerdranch.android.criminalintent.fileprovider", mPhotoFile); 
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                List<ResolveInfo> cameraActivities = getActivity().getPackageManager().queryIntentActivities(captureImage, PackageManager.MATCH_DEFAULT_ONLY);
+                    for (ResolveInfo activity : cameraActivities) { 
+                        getActivity().grantUriPermission(activity.activityInfo.packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION); 
+                    }
+                startActivityForResult(captureImage, REQUEST_PHOTO);
+
+    - Public Folder (external storage)
+        for write/read in external folder we need following permissions
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+        and there are following folders for use that created by OS
+            public static String DIRECTORY_MUSIC = "Music";
+            public static String DIRECTORY_PODCASTS = "Podcasts";
+            public static String DIRECTORY_RINGTONES = "Ringtones";
+            public static String DIRECTORY_ALARMS = "Alarms";
+            public static String DIRECTORY_NOTIFICATIONS = "Notifications";
+            public static String DIRECTORY_PICTURES = "Pictures";
+            public static String DIRECTORY_MOVIES = "Movies";
+            public static String DIRECTORY_DOWNLOADS = "Download";
+            public static String DIRECTORY_DCIM = "DCIM";
+            public static String DIRECTORY_DOCUMENTS = "Documents";
+        and for example create a folder in Documents folder we use following code
+            File myDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "MyPublicFolder");
+            myDirectory.mkdir();
+        this folder will make in following address
+            /documents/MyPublicFolder
+
+    - Resources
+        Resources like raw folder, drawable folder and ... given an id by android
+        and we can use them in layout and java code by their id 
+        for raw folder we use following code for access its files
+            R.raw.apple1
+        or for drawable folder we use following code
+            R.drawable.apple1
+
+    - Assets Folder
+        Assets 
+            this files does not get resource id
+            just use in java code and doesn't change on configuration change
+            we organize files and folders
+            use with AssetManager (will not work with File class)
+
+        to use 
+            first create assest folder go to New → Folder → Assets Folder 
+            unchecked Change Folder Location and Target Source Set set to main
+
+            we create a class for each folder in assets
+            public class Apples { 
+                private static final String APPLES_FOLDER = "apples"; 
+                private AssetManager mAssets;
+                private List<String> mApples = new ArrayList<>();
+
+                public Apples(Context context) {
+                    mAssets = context.getAssets(); 
+                    loadSounds();
+                } 
+
+                private void loadSounds() { 
+                    String[] applesFileNames; 
+                    try { 
+                        applesFileNames = mAssets.list(APPLES_FOLDER); 
+                    }catch (IOException ioe) { 
+                        return;
+                    }
+
+                    for (String filename : applesFileNames) { 
+                        String assetPath = APPLES_FOLDER + "/" + filename; 
+                        mApples.add(assetPath); 
+                    }
+                }
+
+                public InputStream getImage(int index) {
+                    String assetPath = mApplesList.get(index);
+                    try {
+                        return mAssets.open(assetPath);
+                    }catch (Exception ex){
+                        return null;
+                    }
+                }
+            }

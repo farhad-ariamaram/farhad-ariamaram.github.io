@@ -1,0 +1,36 @@
+# JobScheduler and JobServices
+    like services do a particular job in background
+    for creating a job first we create a class extend JobService and override its methods and write our job in onStartJob method
+        public class PollService extends JobService {
+            @Override
+            public boolean onStartJob(JobParameters params) { 
+                //write your job here
+                return false; 
+            }
+            @Override
+            public boolean onStopJob(JobParameters params) { return false; } 
+        }
+    then we introduce it in manifest as service 
+        <service android:name=".PollService" 
+            android:permission="android.permission.BIND_JOB_SERVICE" 
+            android:exported="true"
+        />
+    then in where we want use our job schedule it with following code
+        final int JOB_ID = 1;
+        ComponentName serviceComponent = new ComponentName(context, ToastonnetJob.class);
+        JobInfo.Builder builder = new JobInfo.Builder(JOB_ID, serviceComponent);
+        builder.setMinimumLatency(10 * 1000); // Wait at least 10s
+        builder.setOverrideDeadline(20 * 1000); // Maximum delay 20s
+        JobScheduler jobScheduler = (JobScheduler)getSystemService(JOB_SCHEDULER_SERVICE);
+        jobScheduler.schedule(builder.build());
+    and for check whether job scheduled or not use following code
+        final int JOB_ID = 1;
+        JobScheduler scheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        boolean hasBeenScheduled = false;
+        for (JobInfo jobInfo : scheduler.getAllPendingJobs()) { 
+            if (jobInfo.getId() == JOB_ID) { hasBeenScheduled = true; } 
+        }
+
+    Note: setPeriodic() not work on android <= N 
+          setRequiredNetworkType() not work in my test
+          when job start for first time scheduled test return true but job will never start again

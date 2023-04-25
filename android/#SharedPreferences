@@ -1,0 +1,21 @@
+# SharedPreferences 
+
+    for store data as key-values we use SharedPreferences that store data in xml files
+    in sandbox and because that its not good for sensitive data like passwords
+    for use first we define a class as following code
+        public class QueryPreferences { 
+            private static final String PREF_SEARCH_QUERY = "searchQuery";
+            public static String getStoredQuery(Context context) { 
+                return PreferenceManager.getDefaultSharedPreferences(context) 
+                    .getString(PREF_SEARCH_QUERY, null); 
+            }
+            public static void setStoredQuery(Context context, String query) { 
+                PreferenceManager.getDefaultSharedPreferences(context) 
+                    .edit() 
+                    .putString(PREF_SEARCH_QUERY, query) 
+                    .apply(); 
+            } 
+        }
+
+    for every data we want to store in SharedPreferences 
+    we should create a class with key and get and set methods like top class

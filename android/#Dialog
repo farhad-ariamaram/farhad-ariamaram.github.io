@@ -1,0 +1,54 @@
+# Dialog
+
+    -AlertDialog
+        for simple showing a dialog with a question and buttons we use this
+            //in onCreate
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            //in onclick event or otherwheres
+            builder.setMessage("Do you want to close this application ?")
+                .setCancelable(false)
+                .setTitle("Exit")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(ActionBarActivity.this, "you choose YES", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(ActionBarActivity.this, "you choose NO", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .create()
+                .show();
+
+    -Custom Dialog
+        for show a custom layout in dialog we use following code
+        first we need a layout for our dialog with buttons and edittexts and other widgets that we need
+        then in activity or fragment
+        //in onCreate
+        Dialog dialog = new Dialog(this);
+        //in click event or otherwheres
+        dialog.setContentView(R.layout.dialog_enter_name);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(false);
+        dialog.setTitle("Custom Dialog");
+        Button submit = dialog.findViewById(R.id.buttonSubmitDialog);
+        Button cancel = dialog.findViewById(R.id.buttonCancelDialog);
+        EditText name = dialog.findViewById(R.id.edittextNameDialog);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Toast.makeText(ActionBarActivity.this, ""+name.getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Toast.makeText(ActionBarActivity.this, "CANCEL", Toast.LENGTH_SHORT).show();
+            }
+        });
+        dialog.show();

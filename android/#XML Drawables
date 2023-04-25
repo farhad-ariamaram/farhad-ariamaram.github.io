@@ -1,0 +1,32 @@
+# XML Drawables
+
+    for make circle buttons or custom rectangle or gradiant use this
+    for make an circle button first create two xml Drawables for normal and pressed state
+        //Normal state at res/drawable/button_beat_box_normal.xml
+            <shape xmlns:android="http://schemas.android.com/apk/res/android" 
+                android:shape="oval">
+                    <solid android:color="@color/dark_blue"/>
+            </shape>
+        //pressed state at res/drawable/button_beat_box_pressed.xml
+            <shape xmlns:android="http://schemas.android.com/apk/res/android" 
+                android:shape="oval">
+                    <solid android:color="@color/red"/>
+            </shape>
+    and then define an list drawable as follow at res/drawable/button_beat_box.xml
+        <selector xmlns:android="http://schemas.android.com/apk/res/android"> 
+            <item android:drawable="@drawable/button_beat_box_pressed" android:state_pressed="true"/> 
+            <item android:drawable="@drawable/button_beat_box_normal" /> 
+        </selector>
+    and finally apply it to button that we want or apply it on style or theme
+        <item name="android:background">@drawable/button_beat_box</item>
+
+    for more than one attribute like circle with stork we should use Layer List Drawables
+    for example make res/drawable/button_beat_box_pressed.xml as follow
+        <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+            <item> <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+                <solid android:color="@color/red"/>
+                    </shape> </item> <item> <shape android:shape="oval">
+                    <stroke android:width="4dp" android:color="@color/dark_red"/>
+                </shape>
+            </item> 
+        </layer-list>

@@ -1,0 +1,152 @@
+# Http Request
+
+    firs of all we need following permission that allow us make http request
+        <uses-permission android:name="android.permission.INTERNET" />
+    it is not dangerous permission and don't need runtime user asking
+    then we should create an class for get result and parse it
+        public class FlickrFetchr { 
+            public byte[] getUrlBytes(String urlSpec) throws IOException { 
+                URL url = new URL(urlSpec); 
+                HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+                try { 
+                    ByteArrayOutputStream out = new ByteArrayOutputStream(); 
+                    InputStream in = connection.getInputStream();
+                    if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) { 
+                        throw new IOException(connection.getResponseMessage() + ": with " + urlSpec); 
+                    }
+                    int bytesRead = 0; 
+                    byte[] buffer = new byte[1024]; 
+                    while ((bytesRead = in.read(buffer)) > 0) { 
+                        out.write(buffer, 0, bytesRead);
+                    } 
+                    out.close(); 
+                    return out.toByteArray(); 
+                } finally { 
+                    connection.disconnect(); 
+                } 
+            }
+            public String getUrlString(String urlSpec) throws IOException { 
+                return new String(getUrlBytes(urlSpec)); 
+            } 
+            public List<GalleryItem> fetchItems() { 
+                List<GalleryItem> items = new ArrayList<>();
+                try { 
+                    String url = Uri.parse("https://api.flickr.com/services/rest/")
+                        .buildUpon()
+                        .appendQueryParameter("method", "flickr.photos.getRecent")
+                        .appendQueryParameter("api_key", API_KEY)
+                        .appendQueryParameter("format", "json")
+                        .appendQueryParameter("nojsoncallback", "1")
+                        .appendQueryParameter("extras", "url_s")
+                        .build().toString();
+                    String jsonString = getUrlString(url);
+                    JSONObject jsonBody = new JSONObject(jsonString);
+                    parseItems(items, jsonBody); 
+                } catch (IOException ioe) { 
+                    //handle exception
+                } catch (JSONException je){ 
+                    //handle exception
+                }
+                return items;
+            }
+        }
+    in activity or fragment that we want make http request and use its data we should run above class 
+    on a background task 
+    easiest way to run background task is using AsyncTask that could use inner class form
+        //you are not allowed to update the UI from a background thread
+        //But onPostExecute method run in main thread and we can update ui in that
+        private class FetchItemsTask extends AsyncTask<Void,Void,Void> { 
+            @Override 
+            protected List<GalleryItem> doInBackground(Void... params) { 
+                return new FlickrFetchr().fetchItems();
+            } 
+            @Override 
+            protected void onPostExecute(List<GalleryItem> items) { 
+                mItems = items; 
+                setupAdapter(); 
+            }
+        }
+    and use it in fragment or activity with following code
+        new FetchItemsTask().execute();
+    and based on output json we create an model class
+        public class GalleryItem { 
+            private String mCaption; 
+            private String mId; 
+            private String mUrl;
+            @Override 
+            public String toString() { return mCaption; } 
+            //getter and setters
+            ...
+        }
+    and a method for parse json to model
+        //in FlickrFetchr class
+        private void parseItems(List<GalleryItem> items, JSONObject jsonBody) throws IOException, JSONException {
+            JSONObject photosJsonObject = jsonBody.getJSONObject("photos"); 
+            JSONArray photoJsonArray = photosJsonObject.getJSONArray("photo");
+            for (int i = 0; i < photoJsonArray.length(); i++) { 
+                JSONObject photoJsonObject = photoJsonArray.getJSONObject(i);
+                GalleryItem item = new GalleryItem(); 
+                item.setId(photoJsonObject.getString("id")); 
+                item.setCaption(photoJsonObject.getString("title"));
+                if (!photoJsonObject.has("url_s")) { continue; }
+                item.setUrl(photoJsonObject.getString("url_s")); items.add(item); 
+            } 
+        }
+    and where we want use data such as adapterView constructor (of recyclerView) we use following code
+        //fragment class level
+        private List<GalleryItem> mItems = new ArrayList<>(); //give data in background task
+        private void setupAdapter() { //fragment class level
+            if (isAdded()) { 
+                mPhotoRecyclerView.setAdapter(new PhotoAdapter(mItems)); 
+            } 
+        }
+        //in onCreateView after wired up recyclerview
+            setupAdapter();
+
+    Note: when using AsyncTask we should use isAdded() method (built-in fragment class) to check
+          wether or not fragment attached to activity to use getActivity() otherwise it throws exception
+          private void setupAdapter() { //fragment class level
+              if (isAdded()) { 
+                  mPhotoRecyclerView.setAdapter(new PhotoAdapter(mItems)); 
+                } 
+            }
+
+    in AsyncTask<Void,Void,Void> we have three params
+        the first param is input type that we pass to it
+            task.execute("First parameter", "Second parameter", "Etc."); 
+            AsyncTask<String,Void,Void> task = new AsyncTask<String,Void,Void>() { 
+                public Void doInBackground(String... params) { 
+                    for (String parameter : params) { 
+                        Log.i(TAG, "Received parameter: " + parameter); 
+                    }
+                    return null;     
+                } 
+            };
+
+        the second param is for update progress bar 
+        in this publishProgress(weeksPassed); in doInBackground cause call onProgressUpdate
+        and update ProgressBar (update ui is allowed in onProgressUpdate)
+            final ProgressBar gestationProgressBar = /* A determinate progress bar */; 
+            gestationProgressBar.setMax(42); /* Max allowed gestation period */
+            haveABaby.execute(); 
+            AsyncTask<Void,Integer,Void> haveABaby = new AsyncTask<Void,Integer,Void>() { 
+                public Void doInBackground(Void... params) { 
+                    while (!babyIsBorn()) { 
+                        Integer weeksPassed = getNumberOfWeeksPassed(); 
+                        publishProgress(weeksPassed); 
+                        patientlyWaitForBaby(); 
+                    } 
+                }
+                public void onProgressUpdate(Integer... params) { 
+                    int progress = params[0]; 
+                    gestationProgressBar.setProgress(progress);     
+                } 
+            };
+
+    Note: setRetainInstance(true) can save state on configure change
+
+    if we want dont manage AsyncTask lifecycle we should use Loaders that manged by LoaderManager
+
+    if we want model and parse json automatically we should use GSON library
+
+    for paging we should use RecyclerView.OnScrollListener to get reach end of current page

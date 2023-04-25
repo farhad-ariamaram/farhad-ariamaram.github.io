@@ -1,0 +1,151 @@
+# Fragment
+
+    always use support library because of bugs in native
+    compile 'com.android.support:appcompat-v7:25.0.1'
+
+    static mode -> use fragment widget in activity layout
+                   connect fragment with android:name attribute to it
+                   cannot change on runtime
+
+    dynamic mode -> use FrameLayout in activity layout
+                    connect them with java code
+                    flexible on runtime               
+
+    Create fragment -> with new context menu create blank fragment
+                       include layout and java
+
+    - fragment lifecycle
+
+        onCreate()      : initial models
+                          mCrime = new Crime();
+
+        onCreateView()  : inflate fragment view 
+                          View v = inflater.inflate(R.layout.fragment_crime, container, false);
+                          return v;
+
+                          wire up widgets
+                          mButton = (Button) v.findViewById(R.id.crime_date);
+                          mButton.SetOnClickListener(...)
+                          mTextview.setText(...);  
+
+    - add fragment to activity
+        (in onCreate() of activity) (note: R.id.fragment_container is FrameLayout that introduces in activity layout)
+        FragmentManager fm = getSupportFragmentManager(); 
+        Fragment fragment = fm.findFragmentById(R.id.fragment_container); (if fragment exist don't re-create)
+        if (fragment == null) { 
+            fragment = new CrimeFragment(); 
+            fm.beginTransaction().add(R.id.fragment_container, fragment).commit(); 
+        }
+
+        onAttach(Context), onCreate(Bundle), and onCreateView(...) called when fragment add to the FragmentManager
+        onActivityCreated(Bundle) called after activity’s onCreate(Bundle) method has executed
+        onAttach(Context), onCreate(Bundle), onCreateView(...), onActivityCreated(Bundle), onStart(), onResume() are called when add new fragment (FrameLayout has a previous fragment and we add new fragment to it)
+
+        use fragment for each widget in one screen is not good idea better is use custom view in this situations
+       
+    - Fragment Args
+        put and get data in fragments
+            we have two options in fragments for retriev and putExtra
+            option 1:
+            start activity and put and retriev extra in fragments are similar to activities
+                just for retriev intent for get extra data use getActivity().getIntent() in fragments
+            but this way may cause exceptions and depend fragment to activity
+            option 2:
+            use fragment arguments, we should create newIntent method in fragment class
+
+                private static final String ARG_CRIME_ID = "crime_id"; //fragment class level
+                public static CrimeFragment newInstance(int crimeId) {
+                    Bundle args = new Bundle(); 
+                    args.putInt(ARG_CRIME_ID, crimeId);
+                    CrimeFragment fragment = new CrimeFragment(); 
+                    fragment.setArguments(args); 
+                    return fragment; 
+                } 
+            and in activity instantiate fragment like below
+            fragment = CrimeFragment.newInstance(crimeId);
+            note: in fact we attached crimeId to fragment in activity (when connecting fragment to activity)
+                and will retriev that in fragment  
+            and retriev in fragment with below code
+            int crimeId = getArguments().getInt(ARG_CRIME_ID);
+
+    - ActivityForResult in fragments
+        its similar to activity's ActivityForResult but we use 
+        getActivity().setResult(Activity.RESULT_OK, null);
+        for setting result in called fragment
+
+    
+    - ViewPager
+        can swap between fragments
+        it will config in activity class
+
+        //Activity class level
+        private ViewPager mViewPager;
+        private List<Crime> mCrimes;
+
+        OnCreate(){
+            ...
+            mViewPager = (ViewPager) findViewById(R.id.crime_view_pager);
+            mCrimes = CrimeLab.get(this).getCrimes(); 
+            FragmentManager fragmentManager = getSupportFragmentManager(); 
+            mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
+                @Override 
+                public Fragment getItem(int position) { 
+                    Crime crime = mCrimes.get(position); 
+                    return CrimeFragment.newInstance(crime.getId()); 
+                }
+                
+                @Override 
+                public int getCount() { return mCrimes.size(); } 
+            });
+
+            for (int i = 0; i < mCrimes.size(); i++) { 
+                if (mCrimes.get(i).getId().equals(crimeId)) { mViewPager.setCurrentItem(i); break; } 
+            }
+        }
+
+        ViewPager load page and its neighbours at the same time to load them fast
+        we can set how many neighboring pages load at same time by calling setOffscreenPageLimit(int)
+
+        we used FragmentStatePagerAdapter in above example that destroy fragment that not needed from memory
+            it's good when we have a lot of fragments
+        there is another adapter called FragmentPagerAdapter that keep not needed fragment in memory
+            it's good when we have 4 or fewer fragments (like tabbed interface)
+
+    - Multi Fragment
+        when we have multi fragment in one activity (such as tablets) we should not 
+        change fragments from fragments it's done by activity with using of Fragment callback interfaces
+        with a callback interface, a fragment is able to call methods on its hosting activity 
+        without having to know anything about which activity is hosting it
+        to do that, first we create a callback variable in fragment class
+            private Callbacks mCallbacks; //fragment class level
+        then we define an interface that is child of fragment class
+            public interface Callbacks { void onCrimeSelected(Crime crime); }
+        then we override onAttach and initial mCallbacks
+            @Override 
+            public void onAttach(Context context) { 
+                super.onAttach(context); 
+                mCallbacks = (Callbacks) context; // This means that the hosting activity must implement CrimeListFragment.Callbacks
+            }
+        and finally we override onDetach and make mCallbacks null
+            @Override 
+            public void onDetach() { 
+                super.onDetach(); 
+                mCallbacks = null; 
+            }
+        now we should implement this in hosting activity
+            public class CrimeListActivity implements CrimeListFragment.Callbacks{
+                @Override 
+                public void onCrimeSelected(Crime crime) {
+                    if (findViewById(R.id.detail_fragment_container) == null) { //check if we are in phone mode by checking second activity existing
+                        Intent intent = CrimePagerActivity.newIntent(this, crime.getId()); 
+                        startActivity(intent); 
+                    } else { 
+                        Fragment newDetail = CrimeFragment.newInstance(crime.getId());
+                        getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.detail_fragment_container, newDetail) 
+                            .commit(); 
+                    } 
+                }
+            }
+        and in click event or where we need second fragment change we use following code (in first fragment)
+            mCallbacks.onCrimeSelected(crime);

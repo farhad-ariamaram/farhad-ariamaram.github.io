@@ -1,0 +1,76 @@
+# Location
+
+    Google Play Services is set of libraries that live outside the standard library
+    only devices with the Google Play Store app installed and up to date 
+    will be able to use your application that use this libraries
+    for using Google Play Services we need its dependency in gradle
+        com.google.android.gms:play-services
+    and with following code we check whether device support play services or not
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance(); 
+        int errorCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (errorCode != ConnectionResult.SUCCESS) { 
+            //Not Support
+        }
+    this google location api need following permissions in manifest
+        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+        <uses-permission android:name="android.permission.INTERNET" />
+    but because this permission or dangerious we need runtime permission ask too
+        //activity or fragment class level
+        private static final int REQUEST_LOCATION_PERMISSIONS = 0; 
+        private static final String[] LOCATION_PERMISSIONS = new String[]{ 
+            Manifest.permission.ACCESS_FINE_LOCATION, 
+            Manifest.permission.ACCESS_COARSE_LOCATION 
+        };
+        private boolean hasLocationPermission() { 
+            int result = ContextCompat.checkSelfPermission(getActivity(), LOCATION_PERMISSIONS[0]); 
+            return result == PackageManager.PERMISSION_GRANTED; 
+        }
+        @Override 
+        public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) { 
+            switch (requestCode) { 
+                case REQUEST_LOCATION_PERMISSIONS: 
+                    if (hasLocationPermission()) { 
+                        doWithLocation(); 
+                    } 
+                default: 
+                    super.onRequestPermissionsResult(requestCode, permissions, grantResults); 
+            } 
+        }
+        //where it need to use
+        if (hasLocationPermission()) { 
+            doWithLocation(); 
+        } else { 
+            requestPermissions(LOCATION_PERMISSIONS, REQUEST_LOCATION_PERMISSIONS); 
+        }
+    Next we use Google Play Services, for that we need a client to API
+        //activity or fragment class level
+        private GoogleApiClient mClient;
+        //in onCreate
+        mClient = new GoogleApiClient.Builder(getActivity()).addApi(LocationServices.API).build(); 
+        //in onStart
+        mClient.connect();
+        //in onStop
+        mClient.disconnect();
+    Also we can set up an listener for notify when api connected
+    in onCreate instead of last code use following code 
+        mClient = new GoogleApiClient.Builder(getActivity()) 
+                .addApi(LocationServices.API) 
+                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                    @Override 
+                    public void onConnected(Bundle bundle) { getActivity().invalidateOptionsMenu(); }
+                    @Override 
+                    public void onConnectionSuspended(int i) {} 
+                }) 
+                .build();
+    and for get location we use following code
+        LocationRequest request = LocationRequest.create();
+        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        request.setNumUpdates(1);
+        request.setInterval(0);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mClient, request, new LocationListener() { 
+            @Override 
+            public void onLocationChanged(Location location) { 
+                //location is that we want
+            } 
+        }); 

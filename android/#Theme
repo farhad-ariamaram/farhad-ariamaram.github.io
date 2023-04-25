@@ -1,0 +1,65 @@
+# Theme
+
+    in application tag of manifest we specify that using theme with below code
+        android:theme="@style/AppTheme"
+    AppTheme is an style tag that specified in res/values/styles.xml with blow code
+        <resources>
+            <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+                ...
+            </style>
+        </resources>
+    this is our app theme that using Theme.AppCompat.Light.DarkActionBar that is a theme from AppCompat library
+    this is like css file in html that pre-create widgets UI
+    AppCompat has 3 theme for using
+        Theme.AppCompat – a dark theme
+        Theme.AppCompat.Light – a light theme
+        Theme.AppCompat.Light.DarkActionBar – a light theme with a dark toolbar
+
+    - Style
+        to define an style in res/values/styles.xml use followig code
+            <style name="BeatBoxButton"> 
+                <item name="android:background">@color/dark_blue</item> 
+            </style>
+        and apply thisstyle to widegts by followig code
+            style="@style/BeatBoxButton"
+
+        styles can inheritance from eachother
+        option 1: 
+            <style name="BeatBoxButton.Strong"> 
+                <item name="android:textStyle">bold</item> 
+            </style>
+        option 2:
+            <stylename="StrongBeatBoxButton" parent="@style/BeatBoxButton"> 
+                <item name="android:textStyle">bold</item> 
+            </style>
+
+    - Theme
+        style should apply to all widgets one by one 
+        but themes apply its properties automatically
+        apps has a adefault theme named AppTheme that has decleared in application tag of manifest 
+            android:theme="@style/AppTheme">
+        this default theme is in res/values/styles.xml with followig code
+            <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+                ...
+            </style>
+        that inheritance from Theme.AppCompat.Light.DarkActionBar that is one of AppCompat themes
+
+        colors that has been defined by default in AppTheme does as followig
+            colorPrimaryDark -> StatusBar
+            colorPrimary -> ActionBar
+            colorAccent ->  it is used to tint some widgets, such as an EditText.
+
+        for example for change windows background colors we use followig code in AppTheme
+            <item name="android:windowBackground">@color/soothing_blue</item> 
+        but for changing buttons style we should first introduce an style for button that inheritance from parent 
+        and then change some of attributes that we want and apply this on theme like below
+            <style name="BeatBoxButton" parent="Widget.AppCompat.Button"> 
+                <item name="android:background">@color/dark_blue</item>     
+            </style>
+            <style name="AppTheme" parent="Theme.AppCompat"> 
+                ...
+                <item name="buttonStyle">@style/BeatBoxButton</item>     
+            </style>
+
+        to use a specific resource we use the @ notation like @color/gray points
+        but for use a theme attribute we use ? notation like ?attr/colorAccent

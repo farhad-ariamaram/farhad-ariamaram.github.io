@@ -1,0 +1,10 @@
+# Task
+    each application in android run in a separate task
+    and every activity that we run from our application run in current application task
+    if we want run activity in new task, use following flag
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+    every application has an process, if we run other application activity from our application
+    OS will create an process for that 
+    and if that application ran before we start one of its activities from our app 
+    the new activity will stick to existing process

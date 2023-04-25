@@ -1,0 +1,67 @@
+# broadcast receiver
+
+    this broadcasts only work when app is alive
+    for create it select New -> Other -> BroadcastReceiver that make a class extend BroadcastReceiver
+    and has onReceive() method
+        public class ScreenOnReceiver extends BroadcastReceiver {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //what do when receive broadcast
+            }
+        }
+    then we should introduce this in manifest like below code (in <application> tag)
+        <receiver
+        android:name=".ScreenOnReceiver"
+        android:enabled="true"
+        android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SCREEN_ON"/>
+            </intent-filter>
+        </receiver>
+    then we should register it in a service or activity where we want
+        //activity class level
+        ScreenOnReceiver mScreenOnReceiver = new ScreenOnReceiver();
+        //onStart() method level
+        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        registerReceiver(mScreenOnReceiver, filter);
+    and unregister it in onStop
+        //onStop() method level
+        unregisterReceiver(mScreenOnReceiver);
+    
+    Note: Some receivers needs permissions shoul define in manifest like startup_boot_complete
+
+
+    - Event Bus
+        if we want to broadcast the occurrence of an event within our app’s process only use his library
+        first add dependency module
+            implementation 'org.greenrobot:eventbus:3.0.0'
+        then create a class with getter for passing data we need
+            public class IntentServiceResult {
+                int mResult;
+                String mResultValue;
+                IntentServiceResult(int resultCode, String resultValue) {
+                    mResult = resultCode;
+                    mResultValue = resultValue;
+                }
+
+                public int getResult() {
+                    return mResult;
+                }
+
+                public String getResultValue() {
+                    return mResultValue;
+                }
+            }
+        and register/unregister when we want event bus activate
+            //register in onStart
+            EventBus.getDefault().register(this);
+            //unregister in onStop
+            EventBus.getDefault().unregister(this);
+            //create a method for receiving and handling event
+            @Subscribe(threadMode = ThreadMode.MAIN)
+            public void doThis(IntentServiceResult intentServiceResult) {
+                Toast.makeText(this, intentServiceResult.getResultValue(), Toast.LENGTH_SHORT).show();
+            }
+        and send event where we want with following code
+            EventBus.getDefault().post(new IntentServiceResult(Activity.RESULT_OK, "done!!"));
+    

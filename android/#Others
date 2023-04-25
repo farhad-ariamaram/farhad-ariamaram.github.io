@@ -1,0 +1,79 @@
+# Others
+
+    - Toast
+        Toast.makeText(MainActivity.this, R.string.correct_toast, Toast.LENGTH_SHORT).show();
+
+    - Android Studio Settings
+        - Code generating
+            File → Settings → Expand Editor → Expand Code Style → Select Java → Code Generation tab
+            In the Naming table, select the Field row 
+            add m as the name prefix for fields
+            add s as the name prefix for static fields
+
+    - Check Compatibility
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+
+    - Singleton
+        A singleton is a class that allows only one instance of itself to be created.
+        A singleton exists as long as the application stays in memory -> is not a solution for long-term storage of data
+            
+            public class CrimeLab {
+                private static CrimeLab sCrimeLab; //static instance
+                public static CrimeLab get(Context context) {  //get class
+                    if (sCrimeLab == null) { sCrimeLab = new CrimeLab(context); } 
+                    return sCrimeLab; 
+                }
+                private CrimeLab(Context context) {} //private constructor required for singleton class
+            }
+        Above code create a singleton class.
+        So we have a singleton class named CrimeLab that hold a list of crimes named mCrimes.
+            private List<Crime> mCrimes;
+            private CrimeLab(Context context) { mCrimes = new ArrayList<>(); } //instantination mCrimes in private constructor
+            public List<Crime> getCrimes() { return mCrimes; } //a method for get mCrimes
+            public Crime getCrime(UUID id) { //a method for get crimes by id
+                for (Crime crime : mCrimes) { 
+                    if (crime.getId().equals(id)) { return crime; } 
+                }
+                return null; 
+            }
+        Filling list like get data from repositories and ... done in private constructor
+        private CrimeLab(Context context) { 
+            mCrimes = new ArrayList<>(); 
+            for (int i = 0; i < 100; i++) { 
+                Crime crime = new Crime(); 
+                crime.setTitle("Crime #" + i); 
+                crime.setSolved(i % 2 == 0);
+                mCrimes.add(crime); 
+            } 
+        }
+
+    - app folder
+        every app has an folder that only itself can access that except rooted devices
+        this folder place is /data/data/APP_PACKAGE_NAME
+
+    - Check Network  
+        to check network is connect or not we use following code
+            private boolean isNetworkAvailableAndConnected() { 
+                ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+                boolean isNetworkAvailable = cm.getActiveNetworkInfo() != null; 
+                boolean isNetworkConnected = isNetworkAvailable && cm.getActiveNetworkInfo().isConnected();
+                return isNetworkConnected; 
+            }
+        this code need following permission in manifest
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    - Startup Activity
+        Startup Activity should have following intent-filters in manifest beetwen <Activity>...</Activity> tag
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        also need android:exported="true"
+
+    - Give implicit intent permission for write in private folder
+        Uri uri = FileProvider.getUriForFile(getActivity(), "com.bignerdranch.android.criminalintent.fileprovider", mPhotoFile); 
+        captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        List<ResolveInfo> cameraActivities = getActivity().getPackageManager().queryIntentActivities(captureImage, PackageManager.MATCH_DEFAULT_ONLY);
+        for (ResolveInfo activity : cameraActivities) { 
+            getActivity().grantUriPermission(activity.activityInfo.packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION); 
+        }
