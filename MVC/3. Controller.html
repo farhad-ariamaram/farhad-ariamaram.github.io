@@ -1,0 +1,110 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVC -> Controller</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: forestgreen;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .code {
+            color: dodgerblue;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># Controller</span>
+
+    Controllers define in Controllers Folder
+    every class in this folder role as a controller that extend Controller base class
+    and its name should end with Controller like HomeController
+
+    every controller have methods call Action
+    that in routing we call them 
+    and if we dont specify action in url by default Index will call (if in routing specify default action be Index value)
+
+    Actions return type is ActionResult that can be following types
+        <span class="shape">ViewResult              -> HTML                         -> View()
+        ContentResult           -> String                       -> Content()
+        FileContentResult       -> File                         -> File()
+        JavaScriptResult        -> javascript script            -> JavaScript()
+        JsonResult              -> json use by ajax or APIs     -> Json()
+        RedirectResult          -> Redirect to a new URL        -> Redirect()
+        RedirectToAction        -> redirect to other controller -> RedirectToAction()
+        PartialViewResult       -> Partial view                 -> PartialView()
+        EmptyResult             -> No Response
+        HttpUnauthorizedResult  -> http 403 code</span>
+
+    normally we return a view in Actions
+    if we dont specify view name in View() by default go to View that has same name by action
+    or we can specify what view we want to return
+        View("ViewName") -> ViewName should be in same action controller folder name in view
+        for example
+            <span class="code">HomeController -> Index -> return View("TestView")
+            View -> Home -> TestView.chtml</span>
+        if we want to return another controller action View we use RedirectToAction
+            <span class="code">return RedirectToAction("ViewName", "ControllerName");</span>
+
+    with [ActionName("Find")] attribute we can specify other name for action
+
+    with [NonAction] attribute we can declear a normal method that is not action
+
+    with [HttpPost], [HttpGet], [HttpPut] and ... we can specify ActionVerb of Action 
+
+    for pass model to a view we pass it by View(Model)
+        <span class="code">public ActionResult Index()
+        {
+            //fetch students from the DB using Entity Framework here
+            return View(studentList);
+        }</span>
+    and in the view receive it by @model
+    in first line of view we specify model type
+        <span class="code">@model IEnumerable<MVC_BasicTutorials.Models.Student></span>
+    use model in foreach
+        <span class="code">@foreach (var item in Model)</span>
+    use as lamda
+        <span class="code">(model => model.StudentName)</span>
+    use by @Model
+        <span class="code">@Model.property.toString();</span>
+
+    </pre>
+</body>
+
+</html>

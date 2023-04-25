@@ -1,0 +1,110 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVC -> Exceptions</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: forestgreen;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .code {
+            color: dodgerblue;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+        
+        xmp {
+            display: inline;
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># Exceptions</span>
+
+    <span class="head2">custom error handle </span>
+        first Enable the <customErrors> in web.config
+        and also add HandleErrorAttribute filter in the FilterConfig.cs
+            <span class="code">public class FilterConfig
+            {
+                public static void RegisterGlobalFilters(GlobalFilterCollection filters)
+                {
+                    filters.Add(new HandleErrorAttribute());
+                }
+            }</span>
+        then use handleError attribute on actions
+            <span class="code">[HandleError]
+            [HandleError(ExceptionType =typeof(NullReferenceException), View ="~/Views/Error/NullReference.cshtml")]    
+            public ActionResult Contact()</span>
+
+
+    <span class="head2">Overriding Controller.OnException Method</span>
+        in controller use following method
+            <span class="code">protected override void OnException(ExceptionContext filterContext)
+            {
+                filterContext.ExceptionHandled = true;
+
+                //Log the error!!
+            
+                //Redirect to action
+                filterContext.Result = RedirectToAction("Error", "InternalError");
+
+                // OR return specific view
+                filterContext.Result = new ViewResult
+                {
+                    ViewName = "~/Views/Error/InternalError.cshtml"
+                };
+            }</span>
+
+
+    <span class="head2">Using Application_Error event of HttpApplication</span>
+        <span class="code">public class MvcApplication : System.Web.HttpApplication
+        {
+            //other code removed for clarity
+
+            protected void Application_Error()
+            {
+                var ex = Server.GetLastError();
+                //log an exception
+            }
+        }</span>
+
+    </pre>
+</body>
+
+</html>

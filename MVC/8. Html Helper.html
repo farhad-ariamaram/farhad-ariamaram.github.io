@@ -1,0 +1,93 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVC -> Html Helper</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: forestgreen;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .code {
+            color: dodgerblue;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+        
+        xmp {
+            display: inline;
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># Html Helper</span>
+    <span class="shape">   
+    Html.ActionLink()       ->  <xmp><a></a></xmp>
+    Html.TextBoxFor()       ->  <xmp><input type="textbox"></xmp>
+    Html.TextAreaFor()      ->  <xmp><input type="textarea"></xmp>
+    Html.CheckBoxFor()      ->  <xmp><input type="checkbox"></xmp>
+    Html.RadioButtonFor()   ->  <xmp><input type="radio"></xmp>
+    Html.DropDownListFor()  ->  <xmp><select><option></select></xmp>
+    Html.ListBoxFor()	    ->  <xmp>multi-select list box: <select></select></xmp>
+    Html.HiddenFor()	    ->  <xmp><input type="hidden"></xmp>
+    Html.PasswordFor()	    ->  <xmp><input type="password"></xmp>
+    Html.DisplayFor()	    ->  HTML text: ""
+    Html.LabelFor()         ->  <xmp><label></label></xmp>
+    Html.EditorFor()	    ->  textbox for string property, numeric field for int, double or other numeric type.
+    </span>     
+    for example
+
+        <span class="code">@Html.TextBoxFor(m => m.StudentName, new { @class = "form-control" })</span>
+        equals to
+        <xmp style="color:dodgerblue"><input class="form-control" id="StudentName" name="StudentName" type="text" value="" /></xmp>
+
+        <span class="code">@Html.CheckBoxFor(m => m.isActive)</span>
+        equals to
+        <xmp style="color:dodgerblue"><input data-val="true" id="isActive" name="isActive" type="checkbox" /></xmp>
+
+        <span class="code">@Html.RadioButtonFor(m => m.Gender,"Male")
+        @Html.RadioButtonFor(m => m.Gender,"Female")</span>
+        equals to
+        <xmp style="color:dodgerblue"><input checked="checked" id="Gender" name="Gender" type="radio" value="Male" />
+        <input id="Gender" name="Gender" type="radio" value="Female" /></xmp>
+
+
+    </pre>
+</body>
+
+</html>

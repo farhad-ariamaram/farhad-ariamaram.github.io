@@ -1,0 +1,85 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVC -> ViewBag</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: forestgreen;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .code {
+            color: dodgerblue;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># ViewBag</span>
+
+    we can use ViewBags as temporary variables between view and controller
+
+        in controller :
+            <span class="code">public ActionResult Index()
+            {
+                ViewBag.TotalStudents = studentList.Count();
+                return View();
+            }</span>
+
+        in view:
+            <span class="code"><xmp style="display: inline;color: dodgerblue;"><label>Total Students:</label></xmp>  @ViewBag.TotalStudents</span>
+
+    but in refresh or redirections they will gone 
+
+    ViewData is same as ViewBag with different code
+        in controller :   
+            <span class="code">ViewData["students"] = studentList;
+            ViewData.Add("Id", 1);</span>
+
+        in view :  
+            <span class="code">@std.StudentName</span>
+
+    TempData is for storing data between controller action methods or views 
+    but it save as Sessions and be in memory longer
+        <span class="code">TempData["name"] = "Bill";
+        @TempData["name"]</span>
+
+    </pre>
+</body>
+
+</html>

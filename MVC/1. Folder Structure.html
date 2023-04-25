@@ -1,0 +1,91 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVC -> Folder Structure</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: forestgreen;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># Folder Structure</span>
+
+    <span class="head2">App_Data</span>
+        application data files like LocalDB, .mdf files, XML files, and other data related files
+
+    <span class="head2">App_Start</span>
+        contain class files that will be executed when the application starts 
+            like AuthConfig.cs, BundleConfig.cs, FilterConfig.cs, RouteConfig.cs
+
+    <span class="head2">Content</span>
+        contains static files like CSS files, images, and icons files
+
+    <span class="head2">Controllers</span>
+        contains class files for the controllers
+
+    <span class="head2">Fonts</span>
+        contains custom font files
+
+    <span class="head2">Models</span>
+        contains model class files
+
+    <span class="head2">Scripts</span>
+        contains JavaScript or VBScript files for the application
+
+    <span class="head2">Views</span>
+        contains HTML files for the application
+        The Shared folder under the View folder contains all the views shared
+
+    <span class="head2">Global.asax</span>
+        Global.asax file allows you to write code that runs in response to application-level events
+        such as Application_BeginRequest, application_start
+        application_error, session_start, session_end, etc.
+
+    <span class="head2">Packages.config</span>
+        managed by NuGet to track what packages and versions you have installed
+
+    <span class="head2">Web.config</span>
+        contains application-level configurations
+
+    </pre>
+</body>
+
+</html>

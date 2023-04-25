@@ -1,0 +1,77 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVC -> Validation</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: forestgreen;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .code {
+            color: dodgerblue;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># Validation</span>
+
+    first declear Validations by Data Annotaion in models
+        <span class="shape">
+        Required            Specifies that a property value is required.
+        StringLength        Specifies the minimum and maximum length of characters that are allowed in a string type property.
+        Range               Specifies the numeric range constraints for the value of a property.
+        RegularExpression   Specifies that a property value must match the specified regular expression.
+        CreditCard          Specifies that a property value is a credit card number.
+        CustomValidation    Specifies a custom validation method that is used to validate a property.
+        EmailAddress        Validates an email address.
+        FileExtension       Validates file name extensions.
+        MaxLength           Specifies the maximum length of array or string data allowed in a property.
+        MinLength           Specifies the minimum length of array or string data allowed in a property.
+        Phone               Specifies that a property value is a well-formed phone number.
+        </span>
+    then use following html helpers in view
+        <span class="code">@Html.ValidationMessageFor(model => model.StudentName, "", new { @class = "text-danger" })</span>
+    or for display summary of errors
+        <span class="code">@Html.ValidationSummary(true, "", new { @class = "text-danger" })</span>
+
+    </pre>
+</body>
+
+</html>

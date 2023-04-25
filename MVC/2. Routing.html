@@ -1,0 +1,79 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVC -> Routing</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: forestgreen;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .code {
+            color: dodgerblue;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># Routing</span>
+
+    Routes config in App_Start -> RouteConfig.cs class
+        <span class="code">
+        routes.MapRoute(
+            name: "Default",
+            url: "{controller}/{action}/{id}",
+            defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+        );
+        </span>
+    its mean urls should be following format
+        <span class="code">http://doman/controllerName/actionName/id</span>
+    and if any of sections dont enter by default will be following values
+        <span class="code">controller = "Home"
+        action = "Index"</span>
+    and id is optional
+        <span class="code">id = UrlParameter.Optional</span>
+
+    if a new route add to this class file upper route has priority
+
+    in Global.asax we should register this route class by following code (by default has done)
+        <span class="code">RouteConfig.RegisterRoutes(RouteTable.Routes);</span>
+
+    </pre>
+</body>
+
+</html>

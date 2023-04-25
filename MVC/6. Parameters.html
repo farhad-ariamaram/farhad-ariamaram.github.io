@@ -1,0 +1,83 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVC -> Parameters</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: forestgreen;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .code {
+            color: dodgerblue;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># parameters</span>
+
+    for get id in actions we pass its as parameter
+        <span class="code">public ActionResult Edit(int id)</span>
+    and call this method by one of following urls
+        <span class="code">domain/Student/Edit?id=1</span>
+        or
+        <span class="code">domain/Student/Edit/1</span>
+    and if parameters was more than one
+        <span class="code">public ActionResult Edit(int id, string name)</span>
+    call as follow
+        <span class="code">domain/Student/Edit?id=1&name=John</span>
+
+    also we can use parameters in Post actions
+        <span class="code">[HttpPost]
+        public ActionResult Edit(Student std)</span>
+    that we can Incluse and Exclude some properties
+        <span class="code">public ActionResult Edit([Bind(Include = "StudentId, StudentName")] Student std)
+        public ActionResult Edit([Bind(Exclude = "Age")] Student std)</span>
+    and inputs must have exact same name of Student model properties
+    or we can use FormCollection for access by input name 
+        <span class="code">[HttpPost]
+        public ActionResult Edit(FormCollection values)
+        {
+            var name = values["StudentId"];
+        }</span>
+
+    </pre>
+</body>
+
+</html>
