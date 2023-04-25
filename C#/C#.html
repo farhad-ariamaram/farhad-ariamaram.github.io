@@ -1,0 +1,117 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C#</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: forestgreen;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .code {
+            color: dodgerblue;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># C#</span>
+
+    <span class="head2">Linq</span>
+
+        <span class="code">(from n in numbers
+        where n > 30 && n<80
+        orderby n descending
+        select n).ToArray();</span>
+
+        <span class="code">ToArray -> First() Single() FirstOrDefault() SingleOrDefault() ToList()</span>
+            single return first result that arrive it
+            first check all list and then return first element
+
+        String conditions go to where
+            <span class="code">(from n in Names
+            where n.ToLower().Contains("i")
+            select n).ToList();</span>
+
+
+    <span class="head2">Lambda</span>
+
+        <span class="code">People.Where(p => p.Age>25 && p.Age<40)
+        .Select(p => new { p.Name, p.Age })
+        .OrderByDescending(p => p.Name)
+        .Take(3)
+        .ToList();</span>
+
+
+    <span class="head2">Entity Framework</span>
+
+        Add New Item -> Data -> ADO .NET Entity Data Model -> select dbFirst or codeFirst
+            -> from New Connection select database -> select tables -> finish
+
+        connection string will be in AppConfig
+
+        <span class="code">DBNameEntities _db = new DBNameEntities();</span>
+
+
+    <span class="head2">DataGridView</span>
+
+        restrict EDIT/CREATE/DELETE by DataGridView
+            click > of DataGridView -> uncheck Enable Adding/ Enable Editing/ Enable Deleteing
+
+        fill with custom row name and data
+            click > of DataGridView -> Edit Columns 
+                -> add columns that need 
+                -> in DataPropertyName write equal in Table Column Name 
+                -> in HeaderText write column text  
+                -> uncheck Visible for hiding a column like ID
+                -> use dgvCustomers.AutoGenerateColumns = false; to prevent auto generate cols
+            
+        connect DataGridView to a dataSource
+            <span class="code">dgvCustomers.AutoGenerateColumns = false; //if dont use this code all data cols will generate
+            dgvCustomers.DataSource = db.Customers.ToList();</span>    
+
+        get data by DataGridView
+            <span class="code">if (dgvCustomers.CurrentRow != null)
+            {
+                dgvCustomers.CurrentRow.Cells[0].Value.ToString(); //index 0 is IDin this example
+            }</span>
+
+    </pre>
+</body>
+
+</html>
