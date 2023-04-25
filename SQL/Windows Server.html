@@ -1,0 +1,87 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL -> Windows Server</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: forestgreen;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .code {
+            color: dodgerblue;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># Windows Server</span>
+    
+    <span class="head2">Firewall</span>
+        we should add following rule in both client and server firewall
+            TCP 1433 Allow Doman/Private/Public
+
+    <span class="head2">Group Policy Editor</span>
+        then in Group policy editor go to following path
+            Computer Configuration -> Administrative Templates -> Network -> SSL Configuration Settings\SSL Cipher Suite Order
+        and enable it if not enable 
+        and remove following ciphers 
+            <span class="code">TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
+            TLS_DHE_RSA_WITH_AES_128_GCM_SHA256</span>
+
+    <span class="head2">Checking Connection</span>
+        for checking connection between sql servers use following code in cmd
+            <span class="code">sqlcmd -S tcp:server_ip_address -U sa -P pass</span>
+
+    <span class="head2">Add SQL User</span>
+        for adding new user for sql server or control accessing to databese we use
+            SSMS -> Security -> Login -> Rigth click -> New Login
+        or select a login and change its privilages 
+
+        for give a user just access to a database we should exit it from sysadmin
+        and in user mapping set it owner
+
+    <span class="head2">Connection String</span>
+    and we use following connection string in network base apps
+        <xmp style="display: inline;color: dodgerblue;"><connectionStrings>
+            <add name="testDBEntities" connectionString="metadata=res://*/Model1.csdl|res://*/Model1.ssdl|res://*/Model1.msl;provider=System.Data.SqlClient;provider connection string=&quot;Server=172.16.16.1;Database=testDB;User Id=sa;Password=Un@123123;MultipleActiveResultSets=True;App=EntityFramework&quot;" providerName="System.Data.EntityClient" />
+        </connectionStrings></xmp>
+    </pre>
+</body>
+
+</html>
