@@ -1,0 +1,74 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoIP -> FXS</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: dodgerblue;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .text {
+            color: forestgreen;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># FXS</span>
+
+    <span class="text">
+    for connecting analog phones to Issabel -> making analog phones to ip-phones
+    <span class="shape">
+                SIP           RJ11
+    Issabel <--------> FXS <--------> Fax
+               RJ45        <--------> Analog Phones
+                           <--------> POS
+                             Analog
+    </span>
+    FXS config is same as ip-phones
+        connect analog phones to FXS
+        connect FXS to switch and get its ip and login by web
+        <span class="head3">Grand Stream =></span> 
+                        FXS Port 1 -> 
+                            Primary SIP Server : Issabel server ip
+                            SIP User ID : Extension number
+                            AuthenticationID : Extension number
+                            Password : Secret
+                            DTMF Method : RFC2833
+                            SIP Register : YES
+    </span>
+
+    </pre>
+</body>
+
+</html>

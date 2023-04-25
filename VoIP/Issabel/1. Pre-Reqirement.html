@@ -1,0 +1,107 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoIP -> Pre-Reqirement</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: dodgerblue;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .text {
+            color: forestgreen;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># Pre-Reqirement</span>
+
+    <span class="head2">Structure</span>
+    <span class="text">
+        Issabel ISO     =>  CentOS   =>     Asterisk
+                                            Issable     =>  Apache
+                                                            MySQL
+                                                            Linux Manager
+        Issabel manage CentOS and Asterisk with a web application
+    </span>
+
+    <span class="head2">Installation</span>
+    <span class="text">
+        Boot => install (first option) => Select Language => DateTime : Iran
+                                                             Software : last version
+                                                             Installation : select hard disk 
+                                                             Network : set here or later in Issabel with nmtui
+                                                             Keyboard : select Keyboard layout
+
+                                        => select install => set root password
+                                        => after install => set MySql password => set Web admin password
+                                        => enter CentOs with root user
+
+        After Installation we can enter Issabel web application with Issabel server ip
+    </span>
+
+    <span class="head2">Requirement</span>
+    <span class="text">
+        Recording Feature => Use SSD or Red HDD in PC or SaS in Servers (SSD need backup)
+        Multi Codecs => Need more RAM
+        Concurrent Calls => Need more CPU and RAM
+
+        1/3 employees we have Concurrent Calls
+
+        for 20~50 Concurrent Calls => CPU : 4 Core in VMs or Core i5
+                                    RAM : 4 GB
+        for recording => 1MB for 1Min
+                        100GB for 1 year
+    </span>
+
+    <span class="head2">Virtualization</span>
+    <span class="text">
+        PC =>   Windows 8 or 10 : hyperV
+                Windows 7 : VMware Workstation
+
+        Server =>   Windows : hyperV
+                    Linux : Esxi
+
+        activating hyperV => Windows 8 and 10 : use program & features
+                             Windows Server : Roles
+        
+        hyperV :
+            Right-Click on Desktop -> Virtual Switch Manager -> Add one switch with External type and a name and select system real NIC
+            Right-Click on Desktop -> New -> Virtual Machine -> Generation 1 -> Select Switch that we create 
+            after create -> select setting of vm -> assign cpu and ram -> select Issabel iso
+            (in windows server if switch was created no need create anymore)
+
+        VMware Workstation :
+            like hyperV but we choose Bridge in network setting
+    </span>
+
+    <span class="head2">MoboXterm</span>
+    <span class="text">
+        for connecting Issabel Server through other network PCs we use MoboXterm
+        it provide us SSH(linux console), FTP and other application for linux management
+    </span>
+
+    </pre>
+</body>
+
+</html>

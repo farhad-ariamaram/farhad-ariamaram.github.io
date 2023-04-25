@@ -1,0 +1,157 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoIP -> SIP Trunk</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: dodgerblue;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .text {
+            color: forestgreen;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># SIP Trunk</span>
+
+    <span class="text">
+    
+    <span class="head2">Buy SIP Trunk Service</span>
+        when we use purches services for VoIP from companies like TCI  and they give us following ip addresses
+                <span class="head3">
+                SBC-server-ip = 10.153.40.30
+                WAN-ip = 10.192.101.90/30
+                gateway-ip = 10.192.102.89
+                </span>
+        
+    <span class="head2">Implementation</span>
+    we have 3 option for implement it   
+
+        <span class="head3">1- using routers</span>
+            <span class="shape">Issabel <---> Switch <---> Router <---> Modem</span>
+            in this situation we use NAT for routing and connecting our phone center to Service
+
+            using routers [with mikrotik router]
+
+                src-NAT > src-addr = issabel-ip    dst-NAT > src-addr = SBC-ip      static-route > dst-addr = SBC-ip
+                        > dst-addr = SBC-ip                > dst-addr = WAN-ip                   > gateway = gateway-ip
+                <span class="shape">
+                        src-NAT
+                        ------------>  
+                issabel <-----------> (eth0-LAN) mikrotik (eth1-WAN) <---------------------> SBC Server
+                        <------------                                ---------------------->      
+                        dst-NAT                                          static-route
+                </span>
+                mikrotik settings ->
+                                connect mikrotik use winbox -> neighbours show connected routers -> user is admin and password is empty by default
+                                change password and diable unuse services from System -> Services
+                                ip -> Addresses -> + -> interface : eth1 
+                                                        address : 10.192.101.90/30 (WAN-ip)
+                                ip -> Addresses -> + -> interface : eth0 
+                                                        address : 192.168.1.1/24 (LAN-ip) -> this is our gateway ip address from now
+                                ip -> routes -> + -> dst : 10.153.40.30 (SBC-server-ip)
+                                                    gateway : 10.192.102.89 (gateway-ip)  
+                                Tools -> ping and check ping SBC Server
+                                ip -> firewall -> NAT -> + -> chain : srcnat
+                                                            srcaddr : issabel-ip
+                                                            dstaddr : 10.153.40.30 (SBC-server-ip)
+                                                            out interface : eth1
+                                                            Action : masquerade 
+                                ip -> firewall -> NAT -> + -> chain : dstnat
+                                                            srcaddr : 10.153.40.30 (SBC-server-ip)
+                                                            dstaddr : 10.192.101.90 (WAN-ip without /30)
+                                                            protocol : udp
+                                                            Action : dstnat 
+                                                            toAddress : issabel-ip
+                                if not work
+                                    mikrotik -> firewall -> servi port -> make SIP protocol on or off (must check)
+                Issabel setting ->
+                                set issabel network gateway 192.168.1.1/24 (LAN-ip)
+                                and when create SIP Trunk in issabel set host=10.153.40.30 (SBC-server-ip)
+                                now we should can ping PBS Server from issabel server
+
+
+        <span class="head3">2- using addition NIC</span>        
+        <span class="shape">
+                    eth0
+            Issabel <------> Switch
+                    <------> Modem
+                    eth1</span>
+            in this situation CentOS does routing job 
+
+            using addition NIC
+
+                if we was in VM we add a network and if we was in real PC or Server we add NIC
+
+                linux network setting ->
+                                        with {mntui} enter in second NIC network setting and make it manual ip address
+                                        and add ip -> address : 10.192.101.90/30
+                                                    gateway : [empty]
+                                        routing -> edit -> add -> destination : 10.105.40.30
+                                                                nextHop : 10.192.101.89
+                                        {service network restart}
+                                        other eth no need NAT or Routes  and just need to connect with Switch
+
+
+        <span class="head3">3- using one NIC</span>
+            this is not good idea because broadcasting and security problems
+                <span class="shape">Issabel <---> Switch <---> Modem</span>
+            Modem directly connect to switch
+
+                using one NIC
+
+                    linux network setting -> 
+                                            with {mntui} enter in NIC network setting and create two ip
+                                                first ip -> address : 192.168.1.200/24
+                                                second ip -> address : 10.192.101.90/30
+                                            routing -> edit -> add -> destination : 10.105.40.30
+                                                                    nextHop : 10.192.101.89
+                                            {service network restart}
+
+
+
+        Note: in all options we use modem as Bridge mode
+    </span>
+
+    </pre>
+</body>
+
+</html>

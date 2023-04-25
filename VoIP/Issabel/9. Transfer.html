@@ -1,0 +1,82 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoIP -> Transfer</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: dodgerblue;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .text {
+            color: forestgreen;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># Transfer</span>
+
+    <span class="text">
+    we have 4 option for transfering a call 
+
+    <span class="head2">1- Transfer with user</span>
+        in this mode user press Transfer button from phone and dial extension and hang up
+        if transfer button wont exist use feature codes like ** or *2
+
+    <span class="head2">2- Forward</span>
+        in this mode user with feature code forward their calls 
+        its times set in extension setting
+
+    <span class="head2">3- Optional Destination</span>
+        set where call transfer automatically if user noAnswer/Busy/NotReachable 
+        in end of extension setting page we can set it
+            noAnswer occure when Ring Time end
+            Busy not occure if call wait enable
+            with Prefix CID we can add prefix to transfered number to receiver know it is transfered call
+
+    <span class="head2">4- Follow Me</span>
+        it create on extensions and good for noAnswer
+        we can distribute a call to a list by this
+        PBX -> FollowMe -> select extension from right -> 
+                        initial ring time : the extension how many ring before transfer call
+                        follow me list : list of extensions to distribute call
+                                         if want use external numbers put # last of number like 90918222222#
+                        ring time : how many ring extensions on the list
+                        Destination if no answer : if list dont answer where to go
+                        Announce : play voice before transfer call
+                        CID Prefix : add prefix to transfered number to receiver know it is transfered call
+                        ring strategy ->
+                                        ringall -> all ext on the list ring together
+                                        ringallv2 -> all ext on the list ring together with a latency
+                                        hunt -> every ext on list ring as ring time one after one -> if a ext was busy it ring
+                                        memoryhunt -> same as hunt but if from first go to second first ring does not terminate
+                                        firstavailable -> first ext that was available
+                                        firstonnophone -> first that was not on the phone
+                                        ringall-prim -> if first ext of list available other rings else just first ring
+
+    </span>
+
+    </pre>
+</body>
+
+</html>

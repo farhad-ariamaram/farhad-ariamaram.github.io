@@ -1,0 +1,109 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoIP -> Features</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: dodgerblue;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .text {
+            color: forestgreen;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># Features</span>
+
+    <span class="text">
+    <span class="head2">Features</span>
+        with dialing this codes from extensions we can make it do a job like divert
+        PBX -> Feature Code
+
+
+    <span class="head2">Misc Application</span>
+        assign a number for anything (ivr, feature code, ext, ring, queue and ...)
+
+
+    <span class="head2">Misc Destination</span>
+        it is same as Misc Application but we can use it in destination ComboBoxes
+        for example Call a mobile phone number in IVR
+        PBX -> Misc Destination -> Description : a name
+                                   Dial : extension or external phone number (how we descript it in outbound like 909112223366)
+
+
+    <span class="head2">Announcement</span>
+        it can play a recorded voice but dont accept any input
+        it suitable for play company address or such things
+        we should upload recorded voice before add
+        PBX -> Announcement -> allow skip : can skip Announcement by press any key
+                               destination : where go after play voice
+                            
+
+    <span class="head2">Ring Group</span>
+        for distribute call it have ring strategy and list 
+        add from PBX -> Ring Group
+        skip busy agent will skip busy agent
+        send external by put # end of number
+    
+
+    <span class="head2">VoiceMail</span>
+        create on extensions and we can send recorded calls if noAnswer by it
+        in optional destination we make noAnswer to email voice to created voiceMail
+        Email -> Remote SMTP for use gmail smtp on issabel
+
+
+    <span class="head2">Queue</span>
+        when extensions are fewer than callers we use queues to handle them
+        PBX -> Queue -> Quere Name : Name of queue
+                        Queue Password : must be empty because we use static queue
+                        CID Name Prefix : add prefix to CID of caller to user know it was in queue
+                        Static Agents : list of extensions to answer in queue
+                        Agent Announcement : play a voice foe extension user to know where queue from is this call 
+                        Join Announcement : play a voice for caller -> just one time play
+                        Music on Hold Class : music for waiters on queue
+                        Max Wait Time : maximum time caller wait on queue after that transfer to Fail Over Destination
+                        Max Callers : maximum queue capacity -> owerflow callers listen a voice and back to previous menu
+                        Join Empty : if no user available, callers cannot join queue
+                        Leave When Empty : same as above but if any caller be in queue if users go they go too
+                        Agent Timeout : user ring timeout
+                        Queue Weight : if a user be in multi queue this specify what queue is first
+                        Fail Over Destination : where go if timeout in queue
+                        Caller Position Announcements -> Frequency : every x time play position on queue
+                                                         Announce Position : Announce caller queue position
+                                                         Announce Hold Time : calculate wait time and play for caller if < 1min
+                                                         Periodic Announcements : play IVR for callers that are in queue
+                        Ring Strategy :     ringall -> all ext on the list ring together
+                                            ringallv2 -> all ext on the list ring together with a latency
+                                            hunt -> every ext on list ring as ring time one after one -> if a ext was busy it ring
+                                            memoryhunt -> same as hunt but if from first go to second first ring does not terminate
+                                            firstavailable -> first ext that was available
+                                            firstonnophone -> first that was not on the phone
+                                            ringall-prim -> if first ext of list available other rings else just first ring
+    </span>
+
+    </pre>
+</body>
+
+</html>

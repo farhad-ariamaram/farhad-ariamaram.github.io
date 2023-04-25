@@ -1,0 +1,68 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoIP -> Codec</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: dodgerblue;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .text {
+            color: forestgreen;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># Codec</span>
+
+    <span class="text">
+        for compressing and converting voice in phone centers we use codecs
+
+        <span class="head2">Codecs Type</span>
+            two important codecs that we use are
+                <span class="head3">G.711</span> -> also called ulaw an alaw and use over internal communications
+                <span class="head3">iLBC</span>  -> use in communication between phone center over internet
+    
+        <span class="head2">Setting Codecs in Issabel</span>
+            <span class="head3">in issabel 2020</span> -> PBX Configuration -> Asterisk SIP Setting
+            <span class="head3">in issabel 2017</span> -> unembeddedIssabelPBX -> Setting -> Asterisk SIP Setting
+            in this page we declear what codecs we want use 
+        
+        <span class="head2">Setting Codecs in EXtensions</span>
+            in extensions settings in allow and disallow field we declear this extensions
+            use what codecs in allow field and don't allow what codecs in disallow field
+            if leave empty both field extensions will use all codecs that we select in Asterisk SIP Setting
+            Note: allow and disallow also can use in trunk Peer Detail
+    </span>
+
+    </pre>
+</body>
+
+</html>

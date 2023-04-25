@@ -1,0 +1,65 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoIP -> IVR</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: dodgerblue;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .text {
+            color: forestgreen;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># IVR</span>
+
+    <span class="text">
+        IVR means make a menu for incoming call that can select menu by dialing numbers and ...
+
+        <span class="head2">Recording Voices</span>
+            first we need recording voices for our IVRs with following conditions
+                format:.wav     encode:PCM      frequency:8000      bit-rate:16 bit     mono 
+        
+        <span class="head2">Create IVR</span>
+            PBX -> IVR -> Add -> Name : simple name
+                                 Announcement : recordeed voice for play
+                                 Direct Dial : if be extension caller can dial our extension directly
+                                 Timeout : after play Announcement how much time have to enter number
+                                 Timeout Retry : after play Announcement how many time rePlay Announcement
+                                 Timeout Retry recording : play another Announcement after timeout
+                                 Timeout Destination : after timeout and timeout retries where to go
+                                 Invalid Retry : if entered number was not valid how many can retry
+                                 Invalid Retry recording : if entered number was not valid play another Announcement
+                                 Invalid Destination : if entered Invalid and retries done where to go
+                                 IVR Entries : Where to go with dial every number
+        
+            Now in Inbound we should set incoming calls direct to this IVR
+    </span>
+
+    </pre>
+</body>
+
+</html>

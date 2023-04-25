@@ -1,0 +1,113 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoIP -> Extension</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: dodgerblue;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .text {
+            color: forestgreen;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># Extension</span>
+
+    <span class="text">
+        every innerphone is an Extension in Issabel
+
+        <span class="head2">Innerphone Types</span>
+            Softphones : Bria, 3CX, Zoiper, gsWave
+            ip-phone (Hardware) => Panasonic(HDV, UT), Cisco, GrandStream, Yealink
+        
+
+        <span class="head2">Create Extension</span>
+            create => PBX -> Extensions -> this options must declear -> User Extension
+                                                                        Display Name
+                                                                        Secret
+    
+
+        <span class="head2">Assign Extension</span>
+            this options must set on innerphone => Extension number
+                                                   Display Name
+                                                   Secret
+                                                   Issabel server ip
+    
+                <span class="head3">Softphones : </span>                                      
+                    in bria UserId should be EXT_NO@ISSABLE_IP
+                    in 3CX Extension and ID are extension number and Local IP is Issabel server ip
+
+
+                <span class="head3">ip-phones :</span>
+                    first connect it to switch 
+                    get phone ip address by phone network setting or ip scanner or mikrotik
+                    enter ip-phone settings by entering its ip on web browser
+
+                        <span class="head4">Panasonic => </span>
+                                        before going to setting on web we should enable web embedded
+                                        Menu -> System Setting -> Network Setting -> Embedded Web -> ON
+                                                                or System Setting 
+
+                                        default user is admin and default password is adminpass
+
+                                        VoIP -> SIP setting -> Line
+
+                                        set Issabel server ip on following fields :
+                                        Register Server
+                                        Proxy Server
+                                        presence 
+                                        outbound proxy
+                                        service domain
+
+                                        Secret : password
+
+                                        PhoneNumber and AuthenticationID : extension number 
+
+                                        Inter Digit Time is timeout between press keys on phone
+
+                        <span class="head4">Grand Stream =></span>
+                                        Account -> Acoount1 -> Sip Server : Issabel server ip
+                                                            Sip User ID : extension number
+                                                            AuthenticationID : extension number
+                                                            Secret : password                                                                  
+    </span>
+
+    </pre>
+</body>
+
+</html>

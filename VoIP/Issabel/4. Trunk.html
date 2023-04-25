@@ -1,0 +1,209 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoIP -> Trunk</title>
+    <style>
+        body {
+            background-color: black;
+        }
+        
+        * {
+            font-size: large;
+            color: dodgerblue;
+        }
+        
+        .head {
+            color: white;
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+        
+        .head2 {
+            color: white;
+            font-size: x-large;
+            font-weight: bolder;
+        }
+        
+        .head3 {
+            color: gold;
+            font-size: large;
+            font-weight: bolder;
+        }
+        
+        .head4 {
+            color: sandybrown;
+            font-size: large;
+            font-weight: bold;
+        }
+        
+        .text {
+            color: forestgreen;
+        }
+        
+        .shape {
+            color: darkorange;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+<span class="head"># Trunk</span>
+
+    <span class="text">
+        connect two or more telephon center (analog or voip) such as issabel to issabel or issabel to TCI
+
+        Outbound => out calls from issabel
+        Inbound => enter call to issabel
+    
+        <span class="head2">Trunk Types</span>
+            Trust -> without username and password
+            Register -> with username and password  
+        
+        <span class="head2">Create Trunk</span>
+            PBX -> Trunks -> Add SIP Trunk
+                             Display Name (first) : a simple name
+                             Display Name (second) : this is important and use in some services
+                             Peer Detail ->
+                                in trust type :
+                                            host = [destination server ip]
+                                            type = peer
+                                            context = from-trunk
+                                            insecure = port, invite
+                                            qualify = yes 
+                                in register type -> 
+                                            same as above but Peer Detail has two additional line
+                                            username = [trunk-username]
+                                            password = [trunk-password]
+                             Register String (almost no need) : user:pass@ip
+            
+            qualify in above Peer Detail is for check connection between two servers every 60 sec
+                with {sip show peers} command in issabel console we can check connection
+                after connection we can remove qualify from Peer Detail
+    
+            context can be from-trunk      -> for connect to TCI services we use this (in this mode we incoming call go to trunk and with Inbound rules we direct it to extensions by CID and DID )
+                        or from-internal   -> for connect to another voip we use this (in this mode incoming call direct automatically to issabel and no need Inbound rules)
+    
+        <span class="head2">Inbound Routes</span>
+            if context was from-trunk every incoming call first go here and we direct that with rules
+                          
+            <span class="head3">Inbonud Rules</span>
+                PBX -> Inbound Routes -> Add New ->
+                                                Description : a simple name
+                                                DID : if empty means every call with every DID
+                                                CID : if empty means every call with every CID
+                                                Set Destionation : where call go?
+
+                in setting DID and CID we can use patterns
+    
+        <span class="head2">Outbound Routes</span>
+            every outgoing call first go here. Note that Outbound Routes has Priority
+                a user call a number -> number is in inner extensions -> connect call to it
+                                     -> number is not in inner extensions -> matched with Outbound Routes rules -> go to Outbound Routes and direct with its rules
+                                                                          -> not matched -> terminate call
+            <span class="head3">Outbound Rules</span>                                              
+                PBX -> Outbound Routes -> Add New ->
+                                                Route Name : a simple name
+                                                dial pattern -> 4 boxes as follow
+                                                                prepend : add a number to dialed number
+                                                                prefix : number have to dial to connect to trunk -> it will remove from number
+                                                                match : outgoing number pattern
+                                                                callerId : restrict by CID -> means only if caller CID was it
+                                                Trunk Sequence : select destination trunk
+
+            <span class="head3">Dial Pattern</span> 
+                in dial pattern we use follow rules ->
+                    X : 0 to 9
+                    Z : 1 to 9
+                    N : 2 to 9
+                    . : everything and everycount
+
+        <span class="head2">Connect issabel to TCI</span>            
+            after define trunk, Inbound and Outbound in issabel
+            we need a device called FXO Gateway
+                <span class="shape">
+                Issabel <--------> 
+                Ext 1 <----------> Switch <--------> FXO <----> TCI Line(s)
+                Ext 2 <---------->
+                </span>
+            Connect TCI ports to FXO and Connect FXO to switch
+            go to FXO web app -> basic settings -> make FXO IP static
+
+            <span class="head3">Config FXO</span>
+                <span class="head4">Grand Stream</span>
+                    Calling to VoIP Settings
+                        Settings -> Channel Settings -> Calling to voip
+                            SIP Server : ch1-4:P1;
+                            UserId : ch1-4:551;
+                        Settings -> Accounts
+                            Name : P1
+                            SIP Server : Issabel server ip
+                        Settings -> Channel Settings -> SIP Channel Settings
+                            DTMF Method : ch1-4:2
+                        Settings -> FXO Lines -> FXO Termination
+                            Enable Tone Disconnect : yes
+                            Enable Current Disconnect : yes
+                        Settings -> FXO Lines -> FXO Termination -> Call Progress Tones
+                            Dial Tone : ch1-4:f1=350@-11,f2=440@-11,c=0/0
+                        if incoming call CID was unknow
+                            FXO Lines -> Settings -> Port Caller ID Setting
+                                Caller ID Schema : ch1-4:6 -> if not work set to ch1-4:2
+                    Dialing to PSTN
+                        FXO Line -> Dialing
+                            Stage Method : ch1-4:1;
+
+                <span class="head4">Newrock</span>
+                    it has two port behind device one for PC and one for WAN 
+                    we use WAN port for connecting to Switch
+                    for changing ip and making it static we use Basic -> Network
+
+                    Basic -> SIP 
+                        proxy server : [issabel server ip] : [port]
+                        register server : [issabel server ip]
+                    Trunk -> Feature 
+                        Inbound Handle : binding
+                        Number : a number like 500 -> this number is become DID
+                    Routing -> Routes Table 
+                        Routes Table : IP X ROUTE FXO 1,2,3,4
+                        its mean every incoming call from any IP route to port1 then port 2 then ...
+                    Basic -> System
+                        DTMF : RFC2033 (default is it)
+                        we can change codecs here
+            
+            <span class="head3">Troubleshooting</span>
+                if after settings we had problem in connection
+                    in issable web app -> Security -> Advanced Security -> Enable Anonymous SIP Calls
+
+                if problem still exist
+                    in issable web app -> Security -> Advanced Security -> Enable Direct Access To IssablePBX
+                    PBX -> PBX Configure -> unembedded IssabelPBX -> new windows will open
+                    Setting -> Asterisk SIP Setting
+                        Allow SIP Guest : yes
+                        Allow Anonymous InboundSIP Calls : yes
+                        for apply setting in here in top of page IP Configuration must be Public
+                                
+        
+        <span class="head2">Connect issabel to Issabel (or other phone center)</span>
+            first of all two phone centers must be in one network or connect eachother with VPNs or Tunneling
+            create an SIP Trunk in phone center 1 and phone center 2 with following Peer Detail
+
+                    Peer Detail 1:                           Peer Detail 2:
+                        host=phone center 2 ip                   host=phone center 1 ip
+                        type=peer                                type=peer
+                        context=from-internal                    context=from-internal
+                        qualify=yes                              qualify=yes
+                        insecure=port,invite                     insecure=port,invite 
+                        
+            now create Outbound Routes in both phone center
+            assume that first phone center extensions number are 1XX format and second phone center is 2XX format
+            we can use this pattern in Outbound rules
+    
+            Note : Because context is from-internal we don't need Inbound Routes 
+    </span>
+
+    </pre>
+</body>
+
+</html>
